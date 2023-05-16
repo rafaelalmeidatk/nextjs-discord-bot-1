@@ -20,7 +20,7 @@ const JOBS_CHANNEL_ID = '910564441119150100';
 const FEEDBACK_CHANNEL_ID = '843997308616966145';
 
 const RULES_MESSAGES = [
-  'https://i.imgur.com/r9Etfje.png',
+  'https://cdn.discordapp.com/attachments/574725363922501719/1108130187503227005/nextjs.png',
   `
 ‎
 👋 Welcome to the official Next.js Discord server! This is the place to chat about Next.js, ask questions, show off your projects, and collaborate with other developers.
