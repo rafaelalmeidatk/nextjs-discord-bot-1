@@ -4,6 +4,7 @@ import {
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
+import { logAndDelete } from '../../utils';
 
 /**
  * No Job Posts command
@@ -11,22 +12,29 @@ import { ContextMenuCommand } from '../../types';
  * Deletes a message and sends a DM to the user telling them to not send job posts
  */
 
+const NAME = 'No Job Posts';
+
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
-    .setName('No Job Posts')
+    .setName(NAME)
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
-    const { targetMessage } = interaction;
+    const { targetMessage, client } = interaction;
     const originalMessageContent = targetMessage.content;
 
     await Promise.all([
-      targetMessage.delete(),
+      logAndDelete(
+        client,
+        targetMessage,
+        `[Command] ${NAME}`,
+        interaction.user
+      ),
       targetMessage.author.send({
         content: `
-We currently do not allow job posts in this server, unless it's in the context of a discussion. If you're looking to get hired or to advertise a job vacancy see <#910564441119150100>
+We do not allow job posts in this server, unless it's in the context of a discussion. If you're looking to get hired or to advertise a job vacancy see <#910564441119150100>
 Ignoring this warning will result in the account being banned from the server
 `,
         embeds: [

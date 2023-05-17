@@ -1,4 +1,4 @@
-import { Client, GuildMember, Message, TextChannel } from 'discord.js';
+import { Client, GuildMember, Message, TextChannel, User } from 'discord.js';
 
 const MOD_LOG_CHANNEL_ID =
   process.env.MOD_LOG_CHANNEL_ID ?? '763149438951882792';
@@ -19,7 +19,8 @@ export const isJsOrTsFile = (file: string) =>
 export const logAndDelete = async (
   client: Client,
   message: Message,
-  reason: string
+  reason: string,
+  deletedByUser?: User
 ) => {
   const modLogChannel = client.channels.cache.get(
     MOD_LOG_CHANNEL_ID
@@ -28,7 +29,7 @@ export const logAndDelete = async (
   await modLogChannel.send({
     embeds: [
       {
-        title: 'Message automatically deleted',
+        title: 'Message deleted',
         description: '```' + message.content + '```',
         color: 16098851,
         fields: [
@@ -48,6 +49,12 @@ export const logAndDelete = async (
             inline: true,
           },
         ],
+        footer: deletedByUser
+          ? {
+              icon_url: deletedByUser.displayAvatarURL(),
+              text: `Deleted by ${deletedByUser.username}#${deletedByUser.discriminator}`,
+            }
+          : undefined,
       },
     ],
   });
