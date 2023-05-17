@@ -13,7 +13,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.11.0",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
