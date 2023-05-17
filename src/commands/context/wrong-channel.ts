@@ -34,7 +34,7 @@ export const command: ContextMenuCommand = {
           new TextInputBuilder()
             .setCustomId('modMessageInput')
             .setLabel('Message to user (not required)')
-            .setValue('👋 Hey there. This message would fit better in #...')
+            .setValue('👋 Hey there. This message would fit better in #')
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
         )
