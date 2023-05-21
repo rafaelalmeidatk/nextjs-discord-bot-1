@@ -92,10 +92,20 @@ export const command: SlashCommand = {
     if (successCount === 0) color = 'Red';
 
     let description = '';
-    if (successCount > 0)
+    if (successCount > 0) {
       description += `Moved ${successCount} channels to \`${category.name}\`\n`;
-    if (failureCount > 0)
+    }
+    if (failureCount > 0) {
       description += `Failed to move ${failureCount} channels`;
+
+      console.error(
+        `Failed to move ${failureCount} channels to ${category.name}:`
+      );
+      for (const r of res) {
+        if (r.status !== 'rejected') continue;
+        console.error(r.reason);
+      }
+    }
 
     await reply.edit({
       embeds: [
