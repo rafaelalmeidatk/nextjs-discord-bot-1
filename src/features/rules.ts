@@ -41,14 +41,14 @@ const RULES_MESSAGES = [
 
 📜 **Server Rules**
 
-1. Treat everyone with respect. No NFSW content or spam
+1. Treat everyone with respect. No NSFW content or spam
 2. No self-promotion (server invites, advertisements, etc.) outside the correct channels. This includes DMing fellow members
 3. Job posts in this server are not allowed, refer to <#${JOBS_CHANNEL_ID}> if you want to hire someone or are looking for a job
 4. Do not DM members randomly
 5. Do not mention (\`@ping\`) people not in the conversation
 6. Do not use an avatar, nickname, or profile that breaks any of the rules
 7. Moderators will delete messages posted on the wrong channel, please read the channel descriptions before posting
-8. Bumping posts in <#${HELP_CHANNEL_ID}> is allowed to avoid having it going down the list if you still need help. Do not do it more than once a day
+8. Bumping posts in <#${HELP_CHANNEL_ID}> is allowed if you still need help. Please, do not do it more than once a day
 
 If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
 We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
