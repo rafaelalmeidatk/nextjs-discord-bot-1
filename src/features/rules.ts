@@ -49,6 +49,7 @@ const RULES_MESSAGES = [
 6. Do not use an avatar, nickname, or profile that breaks any of the rules
 7. Moderators will delete messages posted on the wrong channel, please read the channel descriptions before posting
 8. Bumping posts in <#${HELP_CHANNEL_ID}> is allowed if you still need help. Please, do not do it more than once a day
+9. Do not cross-post the same question on multiple channels, this includes linking the message on other channels
 
 If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
 We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
