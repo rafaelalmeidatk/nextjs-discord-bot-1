@@ -41,6 +41,15 @@ export const command: ContextMenuCommand = {
       return;
     }
 
+    if (targetMessage.author.id === user.id) {
+      // Stop this way of pinging mods for code help plz
+      interaction.reply({
+        content: 'You cannot report your own message',
+        ephemeral: true,
+      });
+      return;
+    }
+
     const channel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
 
     if (!channel || !channel.isTextBased()) {
