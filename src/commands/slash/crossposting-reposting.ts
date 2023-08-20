@@ -1,7 +1,7 @@
 import { createMentionableSlashCommand } from '../create-mentionable-slash-command';
 
 export const command = createMentionableSlashCommand({
-  name: 'crossposting-repositing',
+  name: 'crossposting-reposting',
   description: 'Replies to tell users not to crosspost/repost',
   reply: {
     title: 'Crossposting and reposting the same question across different channels is not allowed',
