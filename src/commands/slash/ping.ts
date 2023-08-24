@@ -2,7 +2,7 @@ import { createMentionableSlashCommand } from '../create-mentionable-slash-comma
 
 export const command = createMentionableSlashCommand({
   name: 'ping',
-  description: 'Explains why we disencourage pinging other members',
+  description: 'Explains why we discourage pinging other members',
   reply: {
     title: "Don't ping or DM other devs you aren't actively talking to",
     content:
