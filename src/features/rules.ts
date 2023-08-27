@@ -31,7 +31,7 @@ const RULES_MESSAGES = [
 
 ✨ Customize your profile in <id:customize> by adding your own name color or custom roles
 
-🔍 **Here's a quick breakdown of our most popular channels:**
+## 🔍 Here's a quick breakdown of our most popular channels:
 
 <#${GENERAL_CHANNEL_ID}> — General chat about Next.js
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
@@ -39,7 +39,7 @@ const RULES_MESSAGES = [
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
 <#${KUDOS_CHANNEL_ID}> — Shout out people who helped you out
 
-📜 **Server Rules**
+## 📜 Server Rules
 
 1. Treat everyone with respect. No NSFW content or spam
 2. No self-promotion (server invites, advertisements, etc.) outside the correct channels. This includes DMing fellow members
@@ -55,13 +55,12 @@ If you see something against the rules or something that makes you feel unsafe, 
 We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
 `,
   `
-‎
-✍️ **Tips to get help faster**
+## ✍️ Tips to get help faster
 
 1. Don't ask to ask, just ask: <https://dontasktoask.com>
 2. If you are facing an error, share the full error message and what you think might be causing it
 3. Always try to add this to your questions when applicable: "What are you expecting to happen?", "What is happening instead?", "What have you tried?"
-4. Include the relevant dependencies you are working with. \`next info\` will give you a list to get you started
+4. Include the relevant dependencies you are working with. \`npx next info\` will give you a list to get you started
 5. Share the project or a minimal reproduction of the issue, this allows people to investigate better the problem
 
 More tips: <https://stackoverflow.com/help/how-to-ask>
