@@ -88,8 +88,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
   if (reaction.partial) {
     try {
       const fetchedReaction = await reaction.fetch();
-      features.forEach((f) =>
-        f.onReactionAdd?.(client, fetchedReaction, user as User)
+      features.forEach(
+        (f) => f.onReactionAdd?.(client, fetchedReaction, user as User)
       );
     } catch (error) {
       console.log('Error while trying to fetch a reaction', error);
@@ -119,15 +119,15 @@ client.on('messageReactionRemove', async (reaction, user) => {
   if (reaction.partial) {
     try {
       const fetchedReaction = await reaction.fetch();
-      features.forEach((f) =>
-        f.onReactionRemove?.(client, fetchedReaction, user as User)
+      features.forEach(
+        (f) => f.onReactionRemove?.(client, fetchedReaction, user as User)
       );
     } catch (error) {
       console.log('Error while trying to fetch a reaction', error);
     }
   } else {
-    features.forEach((f) =>
-      f.onReactionRemove?.(client, reaction, user as User)
+    features.forEach(
+      (f) => f.onReactionRemove?.(client, reaction, user as User)
     );
   }
 });
