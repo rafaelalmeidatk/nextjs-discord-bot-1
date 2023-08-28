@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, GuildMember } from 'discord.js';
 import { SlashCommand } from '../types';
 
-type Options = {
+interface Options {
   name: string;
   description: string;
   reply: {

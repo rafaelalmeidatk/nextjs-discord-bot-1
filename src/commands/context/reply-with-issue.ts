@@ -1,10 +1,10 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits, ActionRowBuilder, MessageActionRowComponentBuilder, ComponentType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import { crosspostingRepostingReply, notEnoughInfoReply } from "../common-responses";
+import { crosspostingRepostingReply, notEnoughInfoReply, promotionResponse } from "../common-responses";
 import { ContextMenuCommand } from "../../types";
 import reportMessage from "../../report";
 
 
-type Option = {
+interface Option {
     name: string;
     description?: string;
     emoji?: string
@@ -41,8 +41,16 @@ export const responses: Option[] = [
             title: "Don't ask to ask, just ask!",
             content: "Please ask your question directly. If someone knows the answer, they will reply. Also see: <https://dontasktoask.com/>",
         },
+    },
+    {
+        name: 'Promotion',
+        description: 'Replies with the server rules for promotion',
+        reply: promotionResponse,
+        report: {
+            title: "Reported promotion",
+            urgent: false
+        }
     }
-
 ]
 
 
