@@ -26,13 +26,9 @@ export default async function reportMessage(
     );
 
     return false;
-    // interaction.reply({
-    //     content: 'Something went wrong, please try again later',
-    //     ephemeral: true,
-    // });
   }
 
-  const author = await guild.members.fetch(message.author.id);
+  const authorGuildMember = await guild.members.fetch(message.author.id);
   const userGuildMember = await guild.members.fetch(reporter.id);
   const isUserStaff = isStaff(userGuildMember);
 
@@ -44,10 +40,10 @@ export default async function reportMessage(
       {
         title,
         description: '```' + message.content + '```',
-        color: 0xf5a623,
+        color: 0xF5A623,
         author: {
-          name: author.displayName,
-          icon_url: author.displayAvatarURL(),
+          name: authorGuildMember.displayName,
+          icon_url: authorGuildMember.displayAvatarURL(),
         },
         fields: [
           {
