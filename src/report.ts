@@ -46,8 +46,8 @@ export default async function reportMessage(
         description: '```' + message.content + '```',
         color: 0xf5a623,
         author: {
-          name: author?.displayName ?? 'Unknown user',
-          icon_url: author?.displayAvatarURL(),
+          name: author.displayName,
+          icon_url: author.displayAvatarURL(),
         },
         fields: [
           {
