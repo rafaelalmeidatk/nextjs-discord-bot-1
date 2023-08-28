@@ -1,5 +1,6 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits } from 'discord.js';
 import { ContextMenuCommand } from '../types';
+import reportMessage from '../report';
 
 type Options = {
   name: string;
@@ -8,12 +9,19 @@ type Options = {
     title: string;
     content: string;
   };
+  // postReply?: (interaction: ContextMenuCommandInteraction) => void
+  report?: {
+    /** If it is very important for the mods to see */
+    urgent?: boolean;
+    title?: string;
+  }
 };
 
 export const createReplyableMessageCommand = ({
   name,
   reply,
-  botAllowed
+  botAllowed,
+  report
 }: Options) => {
   const command: ContextMenuCommand = {
     data: new ContextMenuCommandBuilder()
@@ -22,7 +30,7 @@ export const createReplyableMessageCommand = ({
       .setType(ApplicationCommandType.Message),
 
     async execute(interaction) {
-      const { targetMessage } = interaction;
+      const { targetMessage, client, guild } = interaction;
 
       // mainly for type safety
       if (!interaction.isMessageContextMenuCommand()) return;
@@ -56,12 +64,19 @@ export const createReplyableMessageCommand = ({
           content: 'Message sent!',
           ephemeral: true,
         })
+
       ]);
 
       // delete interaction response after 1 seconds
       setTimeout(() => {
         interaction.deleteReply();
       }, 1000);
+
+      // report message if enabled for command
+      if (report && guild) {
+        reportMessage(client, guild, targetMessage, requestor, report.urgent, report.title)
+      }
+
     },
   };
 
