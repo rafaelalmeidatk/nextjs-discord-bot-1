@@ -2,7 +2,6 @@ import { createReplyableMessageCommand } from '../create-replyable-message-comma
 
 export const command = createReplyableMessageCommand({
   name: "Don't Ask to Ask",
-  botAllowed: false,
   reply: {
     title: "Don't ask to ask, just ask!",
     content:
