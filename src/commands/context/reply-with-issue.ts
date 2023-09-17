@@ -54,30 +54,22 @@ export const responses: Option[] = [
 
 // select menu generated here because it will be the same every time
 const actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
+const selectMenu = new StringSelectMenuBuilder()
+  .setCustomId('replyWithIssue')
+  .setPlaceholder('Choose the response that will be the most help');
 
-const options: StringSelectMenuOptionBuilder[] = [];
+actionRow.addComponents(selectMenu);
+
 for (const response of responses) {
   const option = new StringSelectMenuOptionBuilder()
     .setLabel(response.name)
     .setValue(response.name);
 
-  if (response.description) {
-    option.setDescription(response.description);
-  }
+  if (response.description) option.setDescription(response.description);
+  if (response.emoji) option.setEmoji({ name: response.emoji });
 
-  if (response.emoji) {
-    option.setEmoji({ name: response.emoji });
-  }
-
-  options.push(option);
+  selectMenu.addOptions(option);
 }
-
-const selectMenu = new StringSelectMenuBuilder()
-  .setCustomId('replyWithIssue')
-  .setPlaceholder('Choose the response that will be the most help')
-  .addOptions(options);
-
-actionRow.addComponents(selectMenu);
 
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
@@ -86,7 +78,7 @@ export const command: ContextMenuCommand = {
     .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
-    const { targetMessage, client, guild } = interaction;
+    const { targetMessage } = interaction;
 
     // mainly for type safety
     if (!interaction.isMessageContextMenuCommand()) return;
@@ -108,7 +100,7 @@ export const command: ContextMenuCommand = {
       // wait for a a chosen option
       const newInteraction = await interactionReply.awaitMessageComponent({
         componentType: ComponentType.StringSelect,
-        time: 5 * 60 * 1000,
+        time: 5 * 60 * 1000, // 5 minutes (more than enough time)
         filter: (i) => i.user.id === interaction.user.id,
       });
 
@@ -146,7 +138,7 @@ export const command: ContextMenuCommand = {
           ],
         }),
 
-        interaction.deleteReply(),
+        interaction.deleteReply()
       ]);
     } catch (err) {
       console.error(err);
