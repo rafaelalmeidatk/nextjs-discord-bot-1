@@ -4,5 +4,5 @@ import { createMentionableSlashCommand } from '../create-mentionable-slash-comma
 export const command = createMentionableSlashCommand({
   name: 'promotion',
   description: 'Replies with the server rules for promotion',
-  reply: promotionResponse
+  reply: promotionResponse,
 });

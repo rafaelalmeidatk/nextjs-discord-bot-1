@@ -4,5 +4,5 @@ import { createMentionableSlashCommand } from '../create-mentionable-slash-comma
 export const command = createMentionableSlashCommand({
   name: 'crossposting-reposting',
   description: 'Replies to tell users not to crosspost/repost',
-  reply: crosspostingRepostingReply
+  reply: crosspostingRepostingReply,
 });
