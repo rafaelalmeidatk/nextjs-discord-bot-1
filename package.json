@@ -9,7 +9,8 @@
     "dev:register-commands": "DEV=true ts-node ./src/register-commands.ts",
     "register-commands": "ts-node ./src/register-commands.ts",
     "build": "tsc",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "format": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "discord.js": "^14.13.0",

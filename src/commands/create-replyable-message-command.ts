@@ -1,20 +1,19 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import {
+  ApplicationCommandType,
+  ContextMenuCommandBuilder,
+  PermissionFlagsBits,
+} from 'discord.js';
 import { ContextMenuCommand } from '../types';
 
 type Options = {
   name: string;
-  botAllowed?: boolean;
   reply: {
     title: string;
     content: string;
   };
 };
 
-export const createReplyableMessageCommand = ({
-  name,
-  reply,
-  botAllowed
-}: Options) => {
+export const createReplyableMessageCommand = ({ name, reply }: Options) => {
   const command: ContextMenuCommand = {
     data: new ContextMenuCommandBuilder()
       .setName(name)
@@ -27,7 +26,7 @@ export const createReplyableMessageCommand = ({
       // mainly for type safety
       if (!interaction.isMessageContextMenuCommand()) return;
 
-      if (!botAllowed && targetMessage.author.bot) {
+      if (targetMessage.author.bot) {
         interaction.reply({
           content: 'You cannot reply to a bot message',
           ephemeral: true,
@@ -36,7 +35,9 @@ export const createReplyableMessageCommand = ({
       }
 
       const requestor = interaction.user;
-      const requestorAsMember = interaction.inCachedGuild() ? interaction.member : null
+      const requestorAsMember = interaction.inCachedGuild()
+        ? interaction.member
+        : null;
 
       Promise.all([
         targetMessage.reply({
@@ -45,9 +46,13 @@ export const createReplyableMessageCommand = ({
               title: reply.title,
               description: reply.content,
               footer: {
-                text: `Requested by ${requestorAsMember?.displayName || requestor.username}`,
-                icon_url: requestorAsMember?.displayAvatarURL() || requestor.displayAvatarURL(),
-              }
+                text: `Requested by ${
+                  requestorAsMember?.displayName || requestor.username
+                }`,
+                icon_url:
+                  requestorAsMember?.displayAvatarURL() ||
+                  requestor.displayAvatarURL(),
+              },
             },
           ],
         }),
@@ -55,7 +60,7 @@ export const createReplyableMessageCommand = ({
         interaction.reply({
           content: 'Message sent!',
           ephemeral: true,
-        })
+        }),
       ]);
 
       // delete interaction response after 1 seconds

@@ -3,6 +3,5 @@ import { createReplyableMessageCommand } from '../create-replyable-message-comma
 
 export const command = createReplyableMessageCommand({
   name: 'Not Enough Info',
-  botAllowed: false,
   reply: notEnoughInfoReply,
 });
