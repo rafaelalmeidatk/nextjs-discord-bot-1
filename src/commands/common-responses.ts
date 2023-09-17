@@ -1,4 +1,4 @@
-interface Option {
+type Option = {
   title: string;
   content: string;
 };

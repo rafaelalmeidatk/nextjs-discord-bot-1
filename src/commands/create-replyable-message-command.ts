@@ -1,7 +1,7 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits } from 'discord.js';
 import { ContextMenuCommand } from '../types';
 
-interface Options {
+type Options = {
   name: string;
   botAllowed?: boolean;
   reply: {

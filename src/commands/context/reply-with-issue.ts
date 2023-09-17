@@ -1,10 +1,9 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, PermissionFlagsBits, ActionRowBuilder, MessageActionRowComponentBuilder, ComponentType, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { crosspostingRepostingReply, notEnoughInfoReply, promotionResponse } from "../common-responses";
 import { ContextMenuCommand } from "../../types";
-import reportMessage from "../../report";
 
 
-interface Option {
+type Option = {
     name: string;
     description?: string;
     emoji?: string
@@ -12,11 +11,6 @@ interface Option {
         title: string;
         content: string;
     };
-    report?: {
-        /** If it is very important for the mods to see */
-        urgent?: boolean;
-        title?: string;
-    }
 };
 
 
@@ -30,10 +24,6 @@ export const responses: Option[] = [
         name: "Crossposting or Reposting",
         description: "Replies to tell users not to crosspost/repost",
         reply: crosspostingRepostingReply,
-        report: {
-            title: "Reported crossposted/reposted message",
-            urgent: false
-        }
     },
     {
         name: "Don't Ask to Ask",
@@ -46,10 +36,6 @@ export const responses: Option[] = [
         name: 'Promotion',
         description: 'Replies with the server rules for promotion',
         reply: promotionResponse,
-        report: {
-            title: "Reported promotion",
-            urgent: false
-        }
     }
 ]
 
@@ -139,11 +125,6 @@ export const command: ContextMenuCommand = {
 
                 interaction.deleteReply()
             ]);
-
-            // report message if enabled for command
-            if (response.report && guild) {
-                reportMessage(client, guild, targetMessage, requestor, response.report.urgent, response.report.title)
-            }
 
         } catch (err) {
             console.error(err);
