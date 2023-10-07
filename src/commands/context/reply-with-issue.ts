@@ -42,7 +42,7 @@ export const responses: Option[] = [
     reply: {
       title: "Don't ask to ask, just ask!",
       content:
-        'Please ask your question directly. If someone knows the answer, they will reply. Also see: <https://dontasktoask.com/>',
+        'Please just ask your question directly: <https://dontasktoask.com/>',
     },
   },
   {
@@ -127,9 +127,7 @@ export const command: ContextMenuCommand = {
               title: response.reply.title,
               description: response.reply.content,
               footer: {
-                text: `Requested by ${
-                  requestorAsMember?.displayName || requestor.username
-                }`,
+                text: `Requested by ${requestorAsMember?.displayName || requestor.username}`,
                 icon_url:
                   requestorAsMember?.displayAvatarURL() ||
                   requestor.displayAvatarURL(),
