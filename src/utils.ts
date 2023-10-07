@@ -27,6 +27,7 @@ export const logAndDelete = async (
   ) as TextChannel;
 
   await modLogChannel.send({
+    content: message.author.id,
     embeds: [
       {
         title: 'Message deleted',
