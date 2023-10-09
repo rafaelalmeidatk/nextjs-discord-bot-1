@@ -1,6 +1,6 @@
 import { TextChannel } from 'discord.js';
 import { OnStartupHandler } from '../types';
-import { CONTENT_SHOWCASE_CHANNEL_ID, SHOWCASE_CHANNEL_ID } from '../constants';
+import { SHOWCASE_CHANNEL_ID } from '../constants';
 /**
  * Rules module
  * ---
@@ -36,7 +36,6 @@ const RULES_MESSAGES = [
 <#${GENERAL_CHANNEL_ID}> — General chat about Next.js
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
-<#${CONTENT_SHOWCASE_CHANNEL_ID}> — Share your blog posts or videos about Next.js or React
 <#${KUDOS_CHANNEL_ID}> — Shout out people who helped you out
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
 
