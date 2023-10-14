@@ -8,12 +8,9 @@ import {
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
 } from 'discord.js';
-import {
-  crosspostingRepostingReply,
-  notEnoughInfoReply,
-  promotionResponse,
-} from '../common-responses';
 import { ContextMenuCommand } from '../../types';
+import { SHOWCASE_CHANNEL_ID, CONTENT_SHOWCASE_CHANNEL_ID } from '../../constants';
+import { notEnoughInfoReply } from './not-enough-info';
 
 type Option = {
   name: string;
@@ -35,7 +32,12 @@ export const responses: Option[] = [
   {
     name: 'Crossposting or Reposting',
     description: 'Replies to tell users not to crosspost/repost',
-    reply: crosspostingRepostingReply,
+    reply: {
+      title:
+        'Crossposting and reposting the same question across different channels is not allowed',
+      content:
+        'Crossposting (posting a question in a channel and send the question link to another channel) and reposting (posting the same question in several channels) are not allowed in this server. See the server rules in https://discord.com/channels/752553802359505017/752553802359505020/1108132432609284187 for more information.',
+    },
   },
   {
     name: "Don't Ask to Ask",
@@ -48,7 +50,29 @@ export const responses: Option[] = [
   {
     name: 'Promotion',
     description: 'Replies with the server rules for promotion',
-    reply: promotionResponse,
+    reply: {
+      title: 'Promotion is not allowed outside the respective channels',
+      content:
+        `We have a few channels that allow for self-promotion (<#${SHOWCASE_CHANNEL_ID}>, <#${CONTENT_SHOWCASE_CHANNEL_ID}>). Sharing promotional links such as referral links, giveaways/contests or anything that would be a plain advertisement is discouraged and may be removed.\n\nIf what you want to share doesn't fit the promotion channels, contact a moderator to know if the post is valid before posting it.`,
+    },
+  },
+  {
+    name: 'Jobs',
+    description: 'Replies with directions for job posts',
+    reply: {
+      title: 'Job posts are not allowed in the server',
+      content:
+        "We do not allow job posts in this server, unless it's in the context of a discussion. If you're looking to get hired or to advertise a job vacancy see <#910564441119150100>",
+    },
+  },
+  {
+    name: 'Ping',
+    description: 'Explains why we discourage pinging other members',
+    reply: {
+      title: "Don't ping or DM other devs you aren't actively talking to",
+      content:
+        "Do not ping other people in order to get attention to your question unless they are actively involved in the discussion. If you're looking to get help, it is a lot better to post your question in a public channel so other people can help or learn from the questions",
+    },
   },
 ];
 
