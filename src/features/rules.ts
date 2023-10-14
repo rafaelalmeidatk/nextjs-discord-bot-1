@@ -1,6 +1,17 @@
 import { TextChannel } from 'discord.js';
 import { OnStartupHandler } from '../types';
-import { SHOWCASE_CHANNEL_ID } from '../constants';
+import {
+  FEEDBACK_CHANNEL_ID,
+  GENERAL_CHANNEL_ID,
+  HELP_CHANNEL_ID,
+  INTRO_CHANNEL_ID,
+  JOBS_CHANNEL_ID,
+  KUDOS_CHANNEL_ID,
+  OFFTOPIC_CHANNEL_ID,
+  RULES_CHANNEL_ID,
+  SHOWCASE_CHANNEL_ID
+} from '../constants';
+
 /**
  * Rules module
  * ---
@@ -9,15 +20,6 @@ import { SHOWCASE_CHANNEL_ID } from '../constants';
  * are going to be "recycled". This means that if we edit something in the rules, we will try to edit
  * the existing messages to avoid creating pings in the channel.
  */
-
-const RULES_CHANNEL_ID = process.env.RULES_CHANNEL_ID ?? '752553802359505020';
-const INTRO_CHANNEL_ID = '766393115044216854';
-const HELP_CHANNEL_ID = '1007476603422527558';
-const OFFTOPIC_CHANNEL_ID = '766433464055496744';
-const KUDOS_CHANNEL_ID = '911305422307225682';
-const GENERAL_CHANNEL_ID = '752647196419031042';
-const JOBS_CHANNEL_ID = '910564441119150100';
-const FEEDBACK_CHANNEL_ID = '843997308616966145';
 
 const RULES_MESSAGES = [
   'https://cdn.discordapp.com/attachments/574725363922501719/1108130187503227005/nextjs.png',

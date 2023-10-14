@@ -14,6 +14,7 @@ import {
   promotionResponse,
 } from '../common-responses';
 import { ContextMenuCommand } from '../../types';
+import { GENERAL_CHANNEL_ID, HELP_CHANNEL_ID } from '../../constants';
 
 type Option = {
   name: string;
@@ -49,6 +50,15 @@ export const responses: Option[] = [
     name: 'Promotion',
     description: 'Replies with the server rules for promotion',
     reply: promotionResponse,
+  },
+  {
+    name: 'No code help in general',
+    description: 'Replies to tell to use #help-forum for code help',
+    reply: {
+      title: 'No code help in general',
+      content:
+        `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> is not allowed.`
+    },
   },
 ];
 
