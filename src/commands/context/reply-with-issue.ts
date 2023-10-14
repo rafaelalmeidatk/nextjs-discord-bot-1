@@ -9,7 +9,7 @@ import {
   StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
-import { SHOWCASE_CHANNEL_ID, CONTENT_SHOWCASE_CHANNEL_ID } from '../../constants';
+import { SHOWCASE_CHANNEL_ID, CONTENT_SHOWCASE_CHANNEL_ID, GENERAL_CHANNEL_ID, HELP_CHANNEL_ID } from '../../constants';
 import { notEnoughInfoReply } from './not-enough-info';
 
 type Option = {
@@ -72,6 +72,15 @@ export const responses: Option[] = [
       title: "Don't ping or DM other devs you aren't actively talking to",
       content:
         "Do not ping other people in order to get attention to your question unless they are actively involved in the discussion. If you're looking to get help, it is a lot better to post your question in a public channel so other people can help or learn from the questions",
+    },
+  },
+  {
+    name: 'No code help in general',
+    description: 'Replies to tell to use #help-forum for code help',
+    reply: {
+      title: 'No code help in general',
+      content:
+        `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> is not allowed.`
     },
   },
 ];
