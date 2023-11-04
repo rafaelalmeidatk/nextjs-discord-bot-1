@@ -80,7 +80,7 @@ export const responses: Option[] = [
     reply: {
       title: 'No code help in general',
       content:
-        `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> is not allowed.`
+        `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> are not allowed.`
     },
   },
 ];
