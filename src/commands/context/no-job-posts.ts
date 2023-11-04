@@ -34,8 +34,8 @@ export const command: ContextMenuCommand = {
       ),
       targetMessage.author.send({
         content: `
-We do not allow job posts in this server, unless it's in the context of a discussion. If you're looking to get hired or to advertise a job vacancy see <#910564441119150100>
-Ignoring this warning will result in the account being banned from the server
+We do not allow job posts in this server, unless it's in the context of a discussion.
+Ignoring this warning will result in the account being banned from the server.
 `,
         embeds: [
           {

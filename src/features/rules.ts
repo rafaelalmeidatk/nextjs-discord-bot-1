@@ -5,7 +5,6 @@ import {
   GENERAL_CHANNEL_ID,
   HELP_CHANNEL_ID,
   INTRO_CHANNEL_ID,
-  JOBS_CHANNEL_ID,
   KUDOS_CHANNEL_ID,
   OFFTOPIC_CHANNEL_ID,
   RULES_CHANNEL_ID,
@@ -45,7 +44,7 @@ const RULES_MESSAGES = [
 
 1. Treat everyone with respect. No NSFW content or spam
 2. No self-promotion (server invites, advertisements, etc.) outside the correct channels. This includes DMing fellow members
-3. Job posts in this server are not allowed, refer to <#${JOBS_CHANNEL_ID}> if you want to hire someone or are looking for a job
+3. Job posts in this server are not allowed, unless it's in the context of a discussion
 4. Do not DM members randomly
 5. Do not mention (\`@ping\`) people not in the conversation
 6. Do not use an avatar, nickname, or profile that breaks any of the rules
