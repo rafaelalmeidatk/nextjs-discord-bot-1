@@ -61,8 +61,7 @@ export const responses: Option[] = [
     description: 'Replies with directions for job posts',
     reply: {
       title: 'Job posts are not allowed in the server',
-      content:
-        "We do not allow job posts in this server, unless it's in the context of a discussion. If you're looking to get hired or to advertise a job vacancy see <#910564441119150100>",
+      content: "We do not allow job posts in this server, unless it's in the context of a discussion.",
     },
   },
   {
