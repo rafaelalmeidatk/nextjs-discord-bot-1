@@ -9,7 +9,13 @@ import {
   StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
-import { SHOWCASE_CHANNEL_ID, CONTENT_SHOWCASE_CHANNEL_ID, GENERAL_CHANNEL_ID, HELP_CHANNEL_ID } from '../../constants';
+import {
+  SHOWCASE_CHANNEL_ID,
+  CONTENT_SHOWCASE_CHANNEL_ID,
+  GENERAL_CHANNEL_ID,
+  HELP_CHANNEL_ID,
+  VERCEL_HELP_CHANNEL_ID,
+} from '../../constants';
 import { notEnoughInfoReply } from './not-enough-info';
 
 type Option = {
@@ -80,6 +86,15 @@ export const responses: Option[] = [
       title: 'No code help in general',
       content:
         `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> are not allowed.`
+    },
+  },
+  {
+    name: 'No Vercel-specific questions',
+    description: 'Replies to tell to use Vercel\'s own GitHub discussion forum for help',
+    reply: {
+      title: 'Please keep this channel primarily Next.js-focused',
+      content:
+        `This Discord server is dedicated to all things Next.js! While we love helping out, Vercel-specific questions are best suited for the official GitHub discussion forum linked in our <#${VERCEL_HELP_CHANNEL_ID}> channel.`
     },
   },
 ];
