@@ -6,6 +6,7 @@ import './assert-env-vars';
 import { FeatureFile } from './types';
 import { isJsOrTsFile } from './utils';
 import { slashCommands, contextMenuCommands } from './commands';
+import { GPT_HELP_CHANNEL_ID, HELP_CHANNEL_ID } from './constants';
 
 const INTRO_CHANNEL_ID = '766393115044216854';
 const VERIFIED_ROLE = '930202099264938084';
@@ -66,6 +67,33 @@ client.on('messageCreate', (message) => {
   }
 
   features.forEach((f) => f.onMessage?.(client, message));
+});
+
+client.on('messageDelete', async (message) => {
+  // if user deletes the original message for a thread, delete the thread
+  if (message.channelId !== message.id) return
+  if (!message.inGuild()) return
+
+  // only #help-forum and #gpt-help are counted
+  if (!message.channel.parentId || ![HELP_CHANNEL_ID, GPT_HELP_CHANNEL_ID].includes(message.channel.parentId)) return
+
+  const channelMessages = await message.channel.messages.fetch({ limit: 10 });
+
+  // only count messages that are not a bot & if no messages, delete the thread
+  const humanMessages = channelMessages.filter(m => !m.author.bot);
+  if (humanMessages.size === 0) {
+    message.channel.delete('OP deleted initial message, so removing thread')
+
+  } else {
+    // tell the mods about this to manually clean up
+    if (!process.env.MOD_LOG_CHANNEL_ID) return;
+    const modLogChannel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID)
+    if (!modLogChannel?.isTextBased()) return;
+
+    await modLogChannel.send({
+      content: `Original message in thread deleted: ${message.channel.url}`,
+    })
+  }
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
