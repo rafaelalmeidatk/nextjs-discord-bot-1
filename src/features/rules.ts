@@ -40,17 +40,14 @@ const RULES_MESSAGES = [
 
 ## 📜 Server Rules
 
-1. Treat everyone with respect. No NSFW content or spam
-2. No self-promotion (server invites, advertisements, etc.) outside the correct channels. This includes DMing fellow members
-3. Job posts in this server are not allowed, unless it's in the context of a discussion
-4. Do not DM members randomly
-5. Do not mention (\`@ping\`) people not in the conversation
-6. Do not use an avatar, nickname, or profile that breaks any of the rules
-7. Moderators will delete messages posted on the wrong channel, please read the channel descriptions before posting
-8. Bumping posts in <#${HELP_CHANNEL_ID}> is allowed if you still need help. Please, do not do it more than once a day
-9. Do not cross-post the same question on multiple channels, this includes linking the message on other channels
-10. Keep discussions focused on web development. Avoid political or religious content or any unrelated topics that don't align with the community's purpose
+1. Be friendly, patient and courteous of people's time and space. Do NOT directly ping/DM/pester or annoy any staff/moderators/etc.
+2. Be respectful. You can disagree, but this cannot be allowed to turn into a personal attack.
+3. No spamming, trolling or advertising. This is both in chats and in the DMs of members here.
+4. Use the channels provided properly. Keep things in their correct channels.
+5. No NSFW, political, religious or unrelated content or discussions that don't align with the community's purpose. This includes profile pictures, usernames, and any other content.
+6. Do not cross-post the same question on multiple channels, this includes linking the message on other channels.
 
+Most importantly, use common sense and keep in mind that this list of rules isn't exhaustive; please listen to what our moderators say.
 If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
 We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
 `,
