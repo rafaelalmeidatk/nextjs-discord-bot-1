@@ -5,10 +5,9 @@ import {
   GENERAL_CHANNEL_ID,
   HELP_CHANNEL_ID,
   INTRO_CHANNEL_ID,
-  KUDOS_CHANNEL_ID,
   OFFTOPIC_CHANNEL_ID,
   RULES_CHANNEL_ID,
-  SHOWCASE_CHANNEL_ID
+  SHOWCASE_CHANNEL_ID,
 } from '../constants';
 
 /**
@@ -37,7 +36,6 @@ const RULES_MESSAGES = [
 <#${GENERAL_CHANNEL_ID}> — General chat about Next.js
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
-<#${KUDOS_CHANNEL_ID}> — Shout out people who helped you out
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
 
 ## 📜 Server Rules
