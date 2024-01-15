@@ -6,7 +6,7 @@ import './assert-env-vars';
 import { FeatureFile } from './types';
 import { isJsOrTsFile } from './utils';
 import { slashCommands, contextMenuCommands } from './commands';
-import { GPT_HELP_CHANNEL_ID, HELP_CHANNEL_ID } from './constants';
+import { HELP_CHANNEL_ID } from './constants';
 
 const INTRO_CHANNEL_ID = '766393115044216854';
 const VERIFIED_ROLE = '930202099264938084';
@@ -74,8 +74,8 @@ client.on('messageDelete', async (message) => {
   if (message.channelId !== message.id) return
   if (!message.inGuild()) return
 
-  // only #help-forum and #gpt-help are counted
-  if (!message.channel.parentId || ![HELP_CHANNEL_ID, GPT_HELP_CHANNEL_ID].includes(message.channel.parentId)) return
+  // only #help-forum is counted
+  if (message.channel.parentId !== HELP_CHANNEL_ID) return
 
   const channelMessages = await message.channel.messages.fetch({ limit: 10 });
 
