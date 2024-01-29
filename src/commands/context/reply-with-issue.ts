@@ -81,7 +81,7 @@ export const responses: Option[] = [
   {
     name: 'Use #help-forum to get help',
     reply: {
-      title: `Use #help-forum for questions`,
+      title: 'Use #help-forum for questions',
       content:
         `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`
     },
