@@ -2,7 +2,7 @@ import { TextChannel } from 'discord.js';
 import { OnStartupHandler } from '../types';
 import {
   FEEDBACK_CHANNEL_ID,
-  GENERAL_CHANNEL_ID,
+  DISCUSSIONS_CHANNEL_ID,
   HELP_CHANNEL_ID,
   INTRO_CHANNEL_ID,
   OFFTOPIC_CHANNEL_ID,
@@ -33,8 +33,8 @@ const RULES_MESSAGES = [
 
 ## 🔍 Here's a quick breakdown of our most popular channels:
 
-<#${GENERAL_CHANNEL_ID}> — General chat about Next.js
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
+<#${DISCUSSIONS_CHANNEL_ID}> — Engage in more in-depth and advanced discussions about Next.js
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
 
