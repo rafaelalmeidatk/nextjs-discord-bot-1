@@ -4,7 +4,6 @@ import {
   FEEDBACK_CHANNEL_ID,
   DISCUSSIONS_CHANNEL_ID,
   HELP_CHANNEL_ID,
-  INTRO_CHANNEL_ID,
   OFFTOPIC_CHANNEL_ID,
   RULES_CHANNEL_ID,
   SHOWCASE_CHANNEL_ID,
@@ -27,15 +26,13 @@ const RULES_MESSAGES = [
 
 📖 We abide by our Code of Conduct. Please read it: <https://github.com/vercel/next.js/blob/canary/CODE_OF_CONDUCT.md>
 
-🙋 Introduce yourself in the <#${INTRO_CHANNEL_ID}> channel, we'd love to learn more about you and what you're working on!
-
 ✨ Customize your profile in <id:customize> by adding your own name color or custom roles
 
 ## 🔍 Here's a quick breakdown of our most popular channels:
 
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
-<#${DISCUSSIONS_CHANNEL_ID}> — Engage in more in-depth and advanced discussions about Next.js
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
+<#${DISCUSSIONS_CHANNEL_ID}> — Engage in more in-depth and advanced discussions about Next.js (you can chat in the channel after being active in <#${HELP_CHANNEL_ID}>)
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
 
 ## 📜 Server Rules
