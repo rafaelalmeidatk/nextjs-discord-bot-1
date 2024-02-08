@@ -160,5 +160,14 @@ client.on('messageReactionRemove', async (reaction, user) => {
   }
 });
 
+client.on("threadUpdate", (oldChannel, channel) => {
+  // make sure the rule threads stay pinned
+  const threads = ['1138338531983491154', '1159350273056190524']
+
+  if (!threads.includes(channel.id)) return
+  if (channel.archived) channel.setArchived(false, 'Keep this thread pinned') 
+  if (!channel.flags.has('Pinned')) channel.pin('Keep this thread pinned')
+})
+
 // Wake up 🤖
 client.login(process.env.DISCORD_BOT_TOKEN);
