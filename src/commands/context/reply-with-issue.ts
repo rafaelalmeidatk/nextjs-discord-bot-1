@@ -12,7 +12,6 @@ import { ContextMenuCommand } from '../../types';
 import {
   SHOWCASE_CHANNEL_ID,
   CONTENT_SHOWCASE_CHANNEL_ID,
-  GENERAL_CHANNEL_ID,
   HELP_CHANNEL_ID,
   VERCEL_HELP_CHANNEL_ID,
 } from '../../constants';
@@ -80,12 +79,11 @@ export const responses: Option[] = [
     },
   },
   {
-    name: 'No code help in general',
-    description: 'Replies to tell to use #help-forum for code help',
+    name: 'Use #help-forum to get help',
     reply: {
-      title: 'No code help in general',
+      title: 'Use #help-forum for questions',
       content:
-        `Since your question concerns a bug specific to your code, please open a <#${HELP_CHANNEL_ID}> post. Code-specific questions in <#${GENERAL_CHANNEL_ID}> are not allowed.`
+        `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`
     },
   },
   {
