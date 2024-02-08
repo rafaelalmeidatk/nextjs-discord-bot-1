@@ -7,6 +7,7 @@ import {
   OFFTOPIC_CHANNEL_ID,
   RULES_CHANNEL_ID,
   SHOWCASE_CHANNEL_ID,
+  TOOLS_CHANNEL_ID,
 } from '../constants';
 
 /**
@@ -31,8 +32,9 @@ const RULES_MESSAGES = [
 ## 🔍 Here's a quick breakdown of our most popular channels:
 
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
-<#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
 <#${DISCUSSIONS_CHANNEL_ID}> — Engage in more in-depth and advanced discussions about Next.js (you can chat in the channel after being active in <#${HELP_CHANNEL_ID}>)
+<#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
+<#${TOOLS_CHANNEL_ID}> — Individual chats focused on tools and libraries that are commonly used with Next.js
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
 
 ## 📜 Server Rules
