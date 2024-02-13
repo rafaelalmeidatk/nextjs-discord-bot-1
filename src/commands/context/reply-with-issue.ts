@@ -29,6 +29,13 @@ type Option = {
 
 export const responses: Option[] = [
   {
+    name: "Discussions",
+    description: "Explains why the user doesn't have access to the discussions channel",
+    reply: {
+      title: "Access to Discussions Channel",
+      content: "We have limited write access to <#752647196419031042>. [Learn more](<https://nextjs-faq.com/on-general-being-removed>)"    }
+  },
+  {
     name: 'Not Enough Info',
     description:
       'Replies with directions for questions with not enough information',
@@ -94,7 +101,7 @@ export const responses: Option[] = [
       content:
         `This Discord server is dedicated to all things Next.js! While we love helping out, Vercel-specific questions are best suited for the official GitHub discussion forum linked in our <#${VERCEL_HELP_CHANNEL_ID}> channel.`
     },
-  },
+  }
 ];
 
 // select menu generated here because it will be the same every time
