@@ -42,6 +42,14 @@ export const responses: Option[] = [
     reply: notEnoughInfoReply,
   },
   {
+    name: "No Codeblock",
+    description: "Gives the user more info about codeblock",
+    reply: {
+      title: "No Codeblock",
+      content: "Please use [codeblocks](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline#h_01GY0DAKGXDEHE263BCAYEGFJA) when sharing code. Alternatively, you can use other tools for sharing code like [paste.ec](https://paste.ec/)!",
+    }
+  },
+  {
     name: 'Crossposting or Reposting',
     description: 'Replies to tell users not to crosspost/repost',
     reply: {
