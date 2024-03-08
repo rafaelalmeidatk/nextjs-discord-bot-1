@@ -14,8 +14,8 @@ import {
   CONTENT_SHOWCASE_CHANNEL_ID,
   HELP_CHANNEL_ID,
   VERCEL_HELP_CHANNEL_ID,
+  DISCUSSIONS_CHANNEL_ID,
 } from '../../constants';
-import { notEnoughInfoReply } from './not-enough-info';
 
 type Option = {
   name: string;
@@ -29,21 +29,34 @@ type Option = {
 
 export const responses: Option[] = [
   {
-    name: "Discussions",
+    name: 'Use #help-forum to get help',
+    description: 'The #help-forum channel is the best place to ask questions',
+    reply: {
+      title: 'Use #help-forum for questions',
+      content:
+        `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`
+    },
+  },
+  {
+    name: 'Discussions',
     description: "Explains why the user doesn't have access to the discussions channel",
     reply: {
-      title: "Access to Discussions Channel",
-      content: "We have limited write access to <#752647196419031042>. [Learn more](<https://nextjs-faq.com/on-general-being-removed>)"    }
+      title: 'Access to Discussions Channel',
+      content: `We have limited write access to <#${DISCUSSIONS_CHANNEL_ID}>. [Learn more](https://nextjs-faq.com/on-general-being-removed)`
+    }
   },
   {
     name: 'Not Enough Info',
-    description:
-      'Replies with directions for questions with not enough information',
-    reply: notEnoughInfoReply,
+    description: 'Replies with directions for questions with not enough information',
+    reply: {
+      title: 'Please add more information to your question',
+      content:
+        'Your question currently does not have sufficient information for people to be able to help. Please add more information to help us help you, for example: relevant code snippets, a reproduction repository, and/or more detailed error messages. See more info on how to ask a good question in https://discord.com/channels/752553802359505017/1138338531983491154 and https://discord.com/channels/752553802359505017/752553802359505020/1108132433917919292',
+    },
   },
   {
     name: 'Crossposting or Reposting',
-    description: 'Replies to tell users not to crosspost/repost',
+    description: 'Keep the question in one channel and wait for a response',
     reply: {
       title:
         'Crossposting and reposting the same question across different channels is not allowed',
@@ -56,7 +69,7 @@ export const responses: Option[] = [
     reply: {
       title: "Don't ask to ask, just ask!",
       content:
-        'Please just ask your question directly: <https://dontasktoask.com/>',
+        'Please just ask your question directly: https://dontasktoask.com',
     },
   },
   {
@@ -86,16 +99,8 @@ export const responses: Option[] = [
     },
   },
   {
-    name: 'Use #help-forum to get help',
-    reply: {
-      title: 'Use #help-forum for questions',
-      content:
-        `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`
-    },
-  },
-  {
     name: 'No Vercel-specific questions',
-    description: 'Replies to tell to use Vercel\'s own GitHub discussion forum for help',
+    description: "Use Vercel's own GitHub discussion forum for help",
     reply: {
       title: 'Please keep this channel primarily Next.js-focused',
       content:
