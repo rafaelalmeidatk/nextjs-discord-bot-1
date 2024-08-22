@@ -124,7 +124,7 @@ export const responses: Option[] = [
   },
   {
     name: 'No Vercel-specific questions',
-    description: "Use Vercel's own GitHub discussion forum for Vercel help",
+    description: "Use Vercel's official community forum for Vercel help",
     reply: {
       title: 'Please keep the content primarily Next.js-focused',
       content:
