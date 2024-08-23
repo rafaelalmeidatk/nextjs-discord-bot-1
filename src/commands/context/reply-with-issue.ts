@@ -15,6 +15,7 @@ import {
   HELP_CHANNEL_ID,
   VERCEL_HELP_CHANNEL_ID,
   DISCUSSIONS_CHANNEL_ID,
+  ANNOUNCEMENT_CHANNEL_ID,
 } from '../../constants';
 
 type Option = {
@@ -42,7 +43,7 @@ export const responses: Option[] = [
     description: "Explains why the user doesn't have access to the discussions channel",
     reply: {
       title: 'Access to Discussions Channel',
-      content: `We have limited write access to <#${DISCUSSIONS_CHANNEL_ID}>. [Learn more](https://nextjs-faq.com/on-general-being-removed)`
+      content: `We have limited write access to <#${DISCUSSIONS_CHANNEL_ID}>. You need to be active in the <#${HELP_CHANNEL_ID}> channel to gain write access. [Learn more](https://nextjs-faq.com/on-general-being-removed).`
     }
   },
   {
@@ -51,7 +52,16 @@ export const responses: Option[] = [
     reply: {
       title: 'Please add more information to your question',
       content:
-        'Your question currently does not have sufficient information for people to be able to help. Please add more information to help us help you, for example: relevant code snippets, a reproduction repository, and/or more detailed error messages. See more info on how to ask a good question in https://discord.com/channels/752553802359505017/1138338531983491154 and https://discord.com/channels/752553802359505017/752553802359505020/1108132433917919292',
+        'Your question currently does not have sufficient information for people to be able to help. Please add more information to help us help you, for example: relevant code snippets, a reproduction repository, and/or more detailed error messages. See more info on how to ask a good question in https://discord.com/channels/752553802359505017/1138338531983491154 and https://discord.com/channels/752553802359505017/752553802359505020/1108132433917919292.',
+    },
+  },
+  {
+    name: 'Improve Forum Question Title',
+    description: 'Tell the user to update their question title to make it more descriptive',
+    reply: {
+      title: 'Please improve the title of your question',
+      content:
+        'To ensure you get the best possible assistance, could you please change your thread title to be more descriptive? Specific titles attract the attention of users who can help and make it easier for others to find similar solutions in the future. You can change the title by going to `•••` → `Edit Post` → `Post Title`.'
     },
   },
   {
@@ -69,7 +79,21 @@ export const responses: Option[] = [
     reply: {
       title: "Don't ask to ask, just ask!",
       content:
-        'Please just ask your question directly: https://dontasktoask.com',
+        'Please just ask your question directly: https://dontasktoask.com.',
+    },
+  },
+  {
+    name: 'Explain Why a Help Post is not Answered',
+    description: 'Let the user know why their post is not replied, and future directions for them.',
+    reply: {
+      title: 'Why your post might have not had answers',
+      content: [
+        'People who help here are all volunteers, they are not paid so not required to attend to any forum posts. So if a post doesn’t have a response, there are four possible cases:',
+        '1. People who may help have not been active yet or did not find the question. In this case you can bump the question later to make it float up the channel so those people might be able to see it. Don’t do it more than once per day.',
+        '2. No one can answer, usually because the question concerns technologies that are too niche or the question is too hard. For example, many people are not able to help with questions about hosting on very niche platforms.',
+        '3. The question is bad. Following the “resources for good questions” in https://discord.com/channels/752553802359505017/1138338531983491154 will help you avoid this third scenario.',
+        '4. The question is too long. Keep it concise please, people who help may not have sufficient spare time and energy to read through a help request that is too long.'
+      ].join("\n\n"),
     },
   },
   {
@@ -78,7 +102,7 @@ export const responses: Option[] = [
     reply: {
       title: 'Promotion is not allowed outside the respective channels',
       content:
-        `We have a few channels that allow for self-promotion (<#${SHOWCASE_CHANNEL_ID}>, <#${CONTENT_SHOWCASE_CHANNEL_ID}>). Sharing promotional links such as referral links, giveaways/contests or anything that would be a plain advertisement is discouraged and may be removed.\n\nIf what you want to share doesn't fit the promotion channels, contact a moderator to know if the post is valid before posting it.`,
+        `We have a few channels that allow for self-promotion: <#${SHOWCASE_CHANNEL_ID}> exclusively for Next.js applications and <#${CONTENT_SHOWCASE_CHANNEL_ID}> for general web development-related content. Sharing promotional links such as referral links, giveaways/contests or anything that would be a plain advertisement is discouraged and may be removed.\n\nIf what you want to share doesn't fit the promotion channels, contact a moderator to know if the post is valid before posting it.`,
     },
   },
   {
@@ -86,7 +110,7 @@ export const responses: Option[] = [
     description: 'Replies with directions for job posts',
     reply: {
       title: 'Job posts are not allowed in the server',
-      content: "We do not allow job posts in this server, unless it's in the context of a discussion.",
+      content: "We do not allow job posts in this server, unless it's in the context of a discussion. You may check the latest official job threads announced in the <#${ANNOUNCEMENT_CHANNEL_ID}> channel.",
     },
   },
   {
@@ -95,16 +119,16 @@ export const responses: Option[] = [
     reply: {
       title: "Don't ping or DM other devs you aren't actively talking to",
       content:
-        "Do not ping other people in order to get attention to your question unless they are actively involved in the discussion. If you're looking to get help, it is a lot better to post your question in a public channel so other people can help or learn from the questions",
+        "Do not ping other people in order to get attention to your question unless they are actively involved in the discussion. If you're looking to get help, it is a lot better to post your question in a public channel so other people can help or learn from the questions.",
     },
   },
   {
     name: 'No Vercel-specific questions',
-    description: "Use Vercel's own GitHub discussion forum for help",
+    description: "Use Vercel's official community forum for Vercel help",
     reply: {
-      title: 'Please keep this channel primarily Next.js-focused',
+      title: 'Please keep the content primarily Next.js-focused',
       content:
-        `This Discord server is dedicated to all things Next.js! While we love helping out, Vercel-specific questions are best suited for the official GitHub discussion forum linked in our <#${VERCEL_HELP_CHANNEL_ID}> channel.`
+        `This Discord server is dedicated to all things Next.js, and is not a Vercel support server. Vercel-specific questions are best suited for the official Vercel community at https://vercel.community. See more resources at <#${VERCEL_HELP_CHANNEL_ID}>.`
     },
   }
 ];
