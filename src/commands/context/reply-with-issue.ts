@@ -84,7 +84,7 @@ export const responses: Option[] = [
   },
   {
     name: 'Explain Why a Help Post is not Answered',
-    description: 'Let the user know why their post is not replied, and future directions for them.',
+    description: 'Explain why a post wasn\'t answered and provide next steps.',
     reply: {
       title: 'Why your post might not have received answers.',
       content: [
