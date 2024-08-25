@@ -7,6 +7,8 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
+  ButtonBuilder,
+  ButtonStyle,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -34,21 +36,22 @@ export const responses: Option[] = [
     description: 'The #help-forum channel is the best place to ask questions',
     reply: {
       title: 'Use #help-forum for questions',
-      content:
-        `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`
+      content: `Got a question? Head over to the <#${HELP_CHANNEL_ID}> channel. It's our go-to spot for all your questions.`,
     },
   },
   {
     name: 'Discussions',
-    description: "Explains why the user doesn't have access to the discussions channel",
+    description:
+      "Explains why the user doesn't have access to the discussions channel",
     reply: {
       title: 'Access to Discussions Channel',
-      content: `We have limited write access to <#${DISCUSSIONS_CHANNEL_ID}>. You need to be active in the <#${HELP_CHANNEL_ID}> channel to gain write access. [Learn more](https://nextjs-faq.com/on-general-being-removed).`
-    }
+      content: `We have limited write access to <#${DISCUSSIONS_CHANNEL_ID}>. You need to be active in the <#${HELP_CHANNEL_ID}> channel to gain write access.`,
+    },
   },
   {
     name: 'Not Enough Info',
-    description: 'Replies with directions for questions with not enough information',
+    description:
+      'Replies with directions for questions with not enough information',
     reply: {
       title: 'Please add more information to your question',
       content:
@@ -57,11 +60,12 @@ export const responses: Option[] = [
   },
   {
     name: 'Improve Forum Question Title',
-    description: 'Tell the user to update their question title to make it more descriptive',
+    description:
+      'Tell the user to update their question title to make it more descriptive',
     reply: {
       title: 'Please improve the title of your question',
       content:
-        'To ensure you get the best possible assistance, could you please change your thread title to be more descriptive? Specific titles attract the attention of users who can help and make it easier for others to find similar solutions in the future. You can change the title by going to `•••` → `Edit Post` → `Post Title`.'
+        'To ensure you get the best possible assistance, could you please change your thread title to be more descriptive? Specific titles attract the attention of users who can help and make it easier for others to find similar solutions in the future. You can change the title by going to `•••` → `Edit Post` → `Post Title`.',
     },
   },
   {
@@ -84,16 +88,17 @@ export const responses: Option[] = [
   },
   {
     name: 'Explain Why a Help Post is not Answered',
-    description: 'Explain why a post wasn\'t answered and provide next steps.',
+    description: "Explain why a post wasn't answered and provide next steps.",
     reply: {
-      title: 'Why your post might not have received answers.',
+      title:
+        'Why your post might not have received answers. [Learn More](<https://nextjs-faq.com/good-question>)',
       content: [
         'People who help here are all volunteers, they are not paid so not required to attend to any forum posts. So if a post doesn’t have a response, there are four possible cases:',
         '1. People who may help have not been active yet or did not find the question. In this case you can bump the question later to make it float up the channel so those people might be able to see it. Don’t do it more than once per day.',
         '2. No one can answer, usually because the question concerns technologies that are too niche or the question is too hard. For example, many people are not able to help with questions about hosting on very niche platforms.',
         '3. The question is bad. Following the “resources for good questions” in https://discord.com/channels/752553802359505017/1138338531983491154 will help you avoid this third scenario.',
-        '4. The question is too long. Keep it concise please, people who help may not have sufficient spare time and energy to read through a help request that is too long.'
-      ].join("\n\n"),
+        '4. The question is too long. Keep it concise please, people who help may not have sufficient spare time and energy to read through a help request that is too long.',
+      ].join('\n\n'),
     },
   },
   {
@@ -101,8 +106,7 @@ export const responses: Option[] = [
     description: 'Replies with the server rules for promotion',
     reply: {
       title: 'Promotion is not allowed outside the respective channels',
-      content:
-        `We have a few channels that allow for self-promotion: <#${SHOWCASE_CHANNEL_ID}> exclusively for Next.js applications and <#${CONTENT_SHOWCASE_CHANNEL_ID}> for general web development-related content. Sharing promotional links such as referral links, giveaways/contests or anything that would be a plain advertisement is discouraged and may be removed.\n\nIf what you want to share doesn't fit the promotion channels, contact a moderator to know if the post is valid before posting it.`,
+      content: `We have a few channels that allow for self-promotion: <#${SHOWCASE_CHANNEL_ID}> exclusively for Next.js applications and <#${CONTENT_SHOWCASE_CHANNEL_ID}> for general web development-related content. Sharing promotional links such as referral links, giveaways/contests or anything that would be a plain advertisement is discouraged and may be removed.\n\nIf what you want to share doesn't fit the promotion channels, contact a moderator to know if the post is valid before posting it.`,
     },
   },
   {
@@ -127,10 +131,9 @@ export const responses: Option[] = [
     description: "Use Vercel's official community forum for Vercel help",
     reply: {
       title: 'Please keep the content primarily Next.js-focused',
-      content:
-        `This Discord server is dedicated to all things Next.js, and is not a Vercel support server. Vercel-specific questions are best suited for the official Vercel community at https://vercel.community. See more resources at <#${VERCEL_HELP_CHANNEL_ID}>.`
+      content: `This Discord server is dedicated to all things Next.js, and is not a Vercel support server. Vercel-specific questions are best suited for the official Vercel community at https://vercel.community. See more resources at <#${VERCEL_HELP_CHANNEL_ID}>.`,
     },
-  }
+  },
 ];
 
 // select menu generated here because it will be the same every time
@@ -200,7 +203,14 @@ export const command: ContextMenuCommand = {
         });
         return;
       }
+      // Button
+      const learnMore = new ButtonBuilder()
+        .setLabel('Learn More')
+        .setURL("https://nextjs-faq.com/good-question")
+        .setStyle(ButtonStyle.Link);
 
+      const row = new ActionRowBuilder<ButtonBuilder>().
+      addComponents(learnMore);
       Promise.all([
         targetMessage.reply({
           embeds: [
@@ -215,9 +225,10 @@ export const command: ContextMenuCommand = {
               },
             },
           ],
+          components: [row],
         }),
 
-        interaction.deleteReply()
+        interaction.deleteReply(),
       ]);
     } catch (err) {
       console.error(err);
