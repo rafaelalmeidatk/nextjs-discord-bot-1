@@ -7,8 +7,6 @@ import {
   ComponentType,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
-  ButtonBuilder,
-  ButtonStyle,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -203,14 +201,7 @@ export const command: ContextMenuCommand = {
         });
         return;
       }
-      // Button
-      const learnMore = new ButtonBuilder()
-        .setLabel('Learn More')
-        .setURL("https://nextjs-faq.com/good-question")
-        .setStyle(ButtonStyle.Link);
 
-      const row = new ActionRowBuilder<ButtonBuilder>().
-      addComponents(learnMore);
       Promise.all([
         targetMessage.reply({
           embeds: [
@@ -225,7 +216,6 @@ export const command: ContextMenuCommand = {
               },
             },
           ],
-          components: [row],
         }),
 
         interaction.deleteReply(),
