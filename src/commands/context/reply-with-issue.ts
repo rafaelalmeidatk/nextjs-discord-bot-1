@@ -15,7 +15,6 @@ import {
   HELP_CHANNEL_ID,
   VERCEL_HELP_CHANNEL_ID,
   DISCUSSIONS_CHANNEL_ID,
-  ANNOUNCEMENT_CHANNEL_ID,
 } from '../../constants';
 
 type Option = {
@@ -89,7 +88,7 @@ export const responses: Option[] = [
     description: "Explain why a post wasn't answered and provide next steps.",
     reply: {
       title:
-        'Why your post might not have received answers. [Learn More](<https://nextjs-faq.com/good-question>)',
+        'Why your post might not have received answers.',
       content: [
         'People who help here are all volunteers, they are not paid so not required to attend to any forum posts. So if a post doesn’t have a response, there are four possible cases:',
         '1. People who may help have not been active yet or did not find the question. In this case you can bump the question later to make it float up the channel so those people might be able to see it. Don’t do it more than once per day.',
@@ -112,7 +111,7 @@ export const responses: Option[] = [
     description: 'Replies with directions for job posts',
     reply: {
       title: 'Job posts are not allowed in the server',
-      content: `We do not allow job posts in this server, unless it's in the context of a discussion. You may check the latest official job threads announced in the <#${ANNOUNCEMENT_CHANNEL_ID}> channel.`,
+      content: `We do not allow job posts in this server, unless it's in the context of a discussion.`,
     },
   },
   {
