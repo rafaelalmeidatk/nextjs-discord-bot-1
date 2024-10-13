@@ -54,16 +54,6 @@ export const responses: Option[] = [
     },
   },
   {
-    name: 'Improve Forum Question Title',
-    description:
-      'Tell the user to update their question title to make it more descriptive',
-    reply: {
-      title: 'Please improve the title of your question',
-      description:
-        'To ensure you get the best possible assistance, could you please change your thread title to be more descriptive? Specific titles attract the attention of users who can help and make it easier for others to find similar solutions in the future. You can change the title by going to `•••` → `Edit Post` → `Post Title`.',
-    },
-  },
-  {
     name: 'Crossposting or Reposting',
     description: 'Keep the question in one channel and wait for a response',
     reply: {
@@ -74,11 +64,13 @@ export const responses: Option[] = [
     },
   },
   {
-    name: "Don't Ask to Ask",
+    name: 'Improve Forum Question Title',
+    description:
+      'Tell the user to update their question title to make it more descriptive',
     reply: {
-      title: "Don't ask to ask, just ask!",
+      title: 'Please improve the title of your question',
       description:
-        'Please just ask your question directly: https://dontasktoask.com.',
+        'To ensure you get the best possible assistance, could you please change your thread title to be more descriptive? Specific titles attract the attention of users who can help and make it easier for others to find similar solutions in the future. You can change the title by going to `•••` → `Edit Post` → `Post Title`.',
     },
   },
   {
@@ -100,6 +92,14 @@ export const responses: Option[] = [
     },
   },
   {
+    name: "Don't Ask to Ask",
+    reply: {
+      title: "Don't ask to ask, just ask!",
+      description:
+        'Please just ask your question directly: https://dontasktoask.com.',
+    },
+  },
+  {
     name: 'Explain Why a Help Post is not Answered',
     description: "Explain why a post wasn't answered and provide next steps.",
     reply: {
@@ -112,6 +112,24 @@ export const responses: Option[] = [
         '4. The question is too long. Keep it concise please, people who help may not have sufficient spare time and energy to read through a help request that is too long.',
       ].join('\n\n'),
     },
+  },
+  {
+    name: "Mark answer",
+    description: "Explains how to mark an answer as the solution",
+    reply: {
+      title: "Mark an answer as the solution",
+      description: [
+        "To mark the message as solution:",
+        "1. Hover over the message you want to mark as the solution.",
+        "2. Right click the message Click the three dots that appear on the right side. ",
+        "3. You'll see a menu which should have the option of `Apps`. Hover Over it.",
+        "4. Click on the `Mark as Answer` option.",
+        "Note: If you don't see the `Mark as Answer` option or `Apps` option, restart/update your discord app! "
+      ].join("\n"),
+      image: {
+        url: 'https://cdn.discordapp.com/attachments/1043615796787683408/1117191182133501962/image.png',
+      },
+    }
   },
   {
     name: 'Promotion',
