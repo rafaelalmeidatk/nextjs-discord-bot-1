@@ -79,9 +79,8 @@ export const responses: Option[] = [
       title: 'Please use code blocks',
       description: [
         'When sharing code or error messages, please use code blocks.',
-        'You can create a code block by wrapping your code in three backticks(`), like this: ```\ncode here\n```',
-        'You can also specify the language in the code block(like ts, js) to enable syntax highlighting, like this(It may not work for mobile):  ```ts\nexport default function Page(){}\n```',
-        'Please check the GIF attached below for more information',
+        'You can create a code block by wrapping your code in three backticks (`), like this: ```\ncode here\n```',
+        'You can also specify the language in the code block (e.g. `ts`, `js`) to enable syntax highlighting:  ```ts\nexport default function Page(){}\n```',
         'Link a Gist to upload entire files: https://gist.github.com/',
         'Link a Code Sandbox to share runnable examples: https://codesandbox.io/s',
         'Link a Code Sandbox to an existing GitHub repo: https://codesandbox.io/s/github/<username>/<reponame>',
