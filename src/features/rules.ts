@@ -37,12 +37,12 @@ const RULES_MESSAGES = [
 
 ## 📜 Server Rules
 
-1. Be friendly, patient and courteous of people's time and space. Do NOT directly ping/DM or annoy any member/moderators/etc.
+1. Be friendly, patient, and courteous of people's time and space. Do NOT directly ping/DM or annoy any member/moderators/etc.
 2. Be respectful. You can disagree, but this cannot be allowed to turn into a personal attack.
-3. No spamming, trolling or advertising. This is both in chats and in the DMs of members here.
-4. Use the channels provided properly by reading their descriptions. Moderators are free to delete any messages posted on the wrong channel.
-5. No NSFW, political, religious or unrelated content or discussions that don't align with the community's purpose. This includes profile pictures, usernames, and any other content.
-6. Do not cross-post the same question on multiple channels, this includes linking the message on other channels.
+3. No spamming, trolling, advertising, or job postings. This applies to both chats and the DMs of members here.
+4. Use the channels provided properly by reading their descriptions. Moderators are free to delete any messages posted in the wrong channel.
+5. No NSFW, political, religious, job-related, or unrelated content or discussions that don't align with the community's purpose. This includes profile pictures, usernames, and any other content.
+6. Do not cross-post the same question on multiple channels, including linking the message on other channels.
 
 Most importantly, use common sense and keep in mind that this list of rules isn't exhaustive; please listen to what our moderators say.
 If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
