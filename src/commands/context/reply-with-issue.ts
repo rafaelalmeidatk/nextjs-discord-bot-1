@@ -146,7 +146,10 @@ export const responses: Option[] = [
     description: 'Replies with directions for job posts',
     reply: {
       title: 'Job posts are not allowed in the server',
-      description: `We do not allow job posts in this server, unless it's in the context of a discussion.`,
+      description: [
+        `We do not allow job posts in this server, unless it's in the context of a discussion.`,
+        `You may check the latest official job threads in the Vercel Community: https://community.vercel.com/tag/jobs`
+      ].join("\n"),
     },
   },
   {
