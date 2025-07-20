@@ -79,8 +79,9 @@ export const responses: Option[] = [
       title: 'Please use code blocks',
       description: [
         'When sharing code or error messages, please use code blocks.',
+
         'You can create a code block by wrapping your code in three backticks (\\`), like this: \n> \\`\\`\\`ts \n> code here\n> \\`\\`\\`',
-        'You can also specify the language in the code block (e.g. ts, js) to enable syntax highlighting:  ```ts\nexport default function Page(){}\n```',
+        'You can also specify the language in the code block (e.g. `ts`, `js`) to enable syntax highlighting:  ```ts\nexport default function Page(){}\n```',
         'Link a Gist to upload entire files: https://gist.github.com/',
         'Link a Code Sandbox to share runnable examples: https://codesandbox.io/s',
         'Link a Code Sandbox to an existing GitHub repo: https://codesandbox.io/s/github/<username>/<reponame>',
@@ -146,7 +147,10 @@ export const responses: Option[] = [
     description: 'Replies with directions for job posts',
     reply: {
       title: 'Job posts are not allowed in the server',
-      description: `We do not allow job posts in this server, unless it's in the context of a discussion.`,
+      description: [
+        `We do not allow job posts in this server, unless it's in the context of a discussion.`,
+        `You may check the latest official job threads in the Vercel Community: https://community.vercel.com/tag/jobs`
+      ].join("\n"),
     },
   },
   {
