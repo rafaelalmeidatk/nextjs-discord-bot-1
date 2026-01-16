@@ -37,7 +37,7 @@ for (const featureFile of featureFiles) {
   features.push(feature);
 }
 
-client.on('ready', () => {
+client.on('clientReady', () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   features.forEach((f) => f.onStartup?.(client));
 });
@@ -88,7 +88,7 @@ client.on('messageDelete', async (message) => {
     // tell the mods about this to manually clean up
     if (!process.env.MOD_LOG_CHANNEL_ID) return;
     const modLogChannel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID)
-    if (!modLogChannel?.isTextBased()) return;
+    if (!modLogChannel?.isSendable()) return;
 
     await modLogChannel.send({
       content: `Original message in thread deleted: ${message.channel.url}`,

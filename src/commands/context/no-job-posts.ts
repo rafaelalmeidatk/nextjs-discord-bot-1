@@ -1,6 +1,7 @@
 import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
+  InteractionContextType,
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
@@ -17,7 +18,7 @@ const NAME = 'No Job Posts';
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
     .setName(NAME)
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setType(ApplicationCommandType.Message),
 

@@ -2,12 +2,20 @@ import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
   PermissionFlagsBits,
-  ActionRowBuilder,
-  MessageActionRowComponentBuilder,
-  ComponentType,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
-  APIEmbed,
+  ModalBuilder,
+  LabelBuilder,
+  MessageFlags,
+  TextDisplayBuilder,
+  ContainerBuilder,
+  MediaGalleryItemBuilder,
+  MediaGalleryBuilder,
+  ButtonStyle,
+  ComponentType,
+  ActionRowBuilder,
+  ButtonBuilder,
+  InteractionContextType,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -22,7 +30,7 @@ type Option = {
   name: string;
   description?: string;
   emoji?: string;
-  reply: APIEmbed;
+  reply: { title: string; description: string; image?: string };
 };
 
 export const responses: Option[] = [
@@ -82,13 +90,11 @@ export const responses: Option[] = [
 
         'You can create a code block by wrapping your code in three backticks (\\`), like this: \n> \\`\\`\\`ts \n> code here\n> \\`\\`\\`',
         'You can also specify the language in the code block (e.g. `ts`, `js`) to enable syntax highlighting:  ```ts\nexport default function Page(){}\n```',
-        'Link a Gist to upload entire files: https://gist.github.com/',
-        'Link a Code Sandbox to share runnable examples: https://codesandbox.io/s',
-        'Link a Code Sandbox to an existing GitHub repo: https://codesandbox.io/s/github/<username>/<reponame>',
+        '* Link a Gist to upload entire files: https://gist.github.com/',
+        '* Link a Code Sandbox to share runnable examples: https://codesandbox.io/s',
+        '* Link a Code Sandbox to an existing GitHub repo: `https://codesandbox.io/s/github/<username>/<reponame>`',
       ].join('\n'),
-      image: {
-        url: 'https://media1.tenor.com/images/a23c33a91cb8d026b83488f1673495fd/tenor.gif?itemid=27632534',
-      },
+      image: 'https://c.tenor.com/AYdCjUfOD78AAAAC/tenor.gif',
     },
   },
   {
@@ -126,9 +132,7 @@ export const responses: Option[] = [
         "4. Click on the `Mark as Answer` option.",
         "Note: If you don't see the `Mark as Answer` option or `Apps` option, restart/update your discord app! "
       ].join("\n"),
-      image: {
-        url: 'https://cdn.discordapp.com/attachments/1043615796787683408/1117191182133501962/image.png',
-      },
+      image: 'https://cdn.discordapp.com/attachments/1043615796787683408/1117191182133501962/image.png',
     }
   },
   {
@@ -172,28 +176,39 @@ export const responses: Option[] = [
   },
 ];
 
-// select menu generated here because it will be the same every time
-const actionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
-const selectMenu = new StringSelectMenuBuilder()
+
+// cache of last 10 previous responses to avoid duplicates
+const responsesCache = [] as `${string}-${string}`[]; // msgId-responseNum
+
+// modal generated here because it will be the same every time
+const modal = new ModalBuilder()
   .setCustomId('replyWithIssue')
-  .setPlaceholder('Choose the response that will be the most help');
+  .setTitle('Reply with Issue')
+  .addLabelComponents(new LabelBuilder()
+    .setLabel('Response that will be the most help')
+    .setDescription('Choose the most appropriate response to help with the issue')
+    .setStringSelectMenuComponent(new StringSelectMenuBuilder()
+      .setCustomId('replyWithIssueSelectMenu')
+      .setPlaceholder('Select a response to send')
+      .setMinValues(1)
+      .setMaxValues(3)
+      .setRequired(true)
+      .addOptions(responses.map(response => {
+        const option = new StringSelectMenuOptionBuilder()
+          .setLabel(response.name)
+          .setValue(response.name)
+        if (response.description) option.setDescription(response.description)
+        if (response.emoji) option.setEmoji({ name: response.emoji })
+        return option
+      }))
+    )
+  );
 
-actionRow.addComponents(selectMenu);
-
-for (const response of responses) {
-  const option = new StringSelectMenuOptionBuilder()
-    .setLabel(response.name)
-    .setValue(response.name);
-
-  if (response.description) option.setDescription(response.description);
-  if (response.emoji) option.setEmoji({ name: response.emoji });
-
-  selectMenu.addOptions(option);
-}
 
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
     .setName('Reply with issue...')
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
     .setType(ApplicationCommandType.Message),
 
@@ -203,61 +218,110 @@ export const command: ContextMenuCommand = {
     // mainly for type safety
     if (!interaction.isMessageContextMenuCommand()) return;
 
+    if (
+      targetMessage.author.id === interaction.applicationId
+      && targetMessage.interactionMetadata?.user.id === interaction.user.id &&
+      // only allow <1min to avoid killing history
+      (Date.now() - targetMessage.createdTimestamp) < 60 * 1000
+    ) {
+      const reply = await interaction.reply({
+        content: 'Would you like to delete this reply?',
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+              .setCustomId('deleteReplyWithIssue')
+              .setLabel('Delete')
+              .setStyle(ButtonStyle.Danger)
+          )
+        ],
+        flags: MessageFlags.Ephemeral,
+      });
+
+      try {
+        const newInteraction = await reply.awaitMessageComponent({
+          componentType: ComponentType.Button,
+          time: 0.5 * 60 * 1000,
+          filter: (i) => i.user.id === interaction.user.id,
+        });
+
+        await newInteraction.update({
+          content: 'Reply deleted.',
+          components: [],
+        });
+
+        await targetMessage.delete();
+        setTimeout(() => newInteraction.deleteReply().catch(() => null), 2500);
+      } catch (err) {
+        if ((err as any)?.code === "InteractionCollectorError" && (err as any)?.reason === "time") {
+          await interaction.deleteReply().catch(() => { });
+        } else {
+          console.error(err);
+        }
+      }
+
+      return;
+    }
+
     if (targetMessage.author.bot) {
       interaction.reply({
         content: 'You cannot reply to a bot message',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
 
-    const interactionReply = await interaction.reply({
-      components: [actionRow],
-      ephemeral: true,
-    });
+    await interaction.showModal(modal);
 
     try {
       // wait for a a chosen option
-      const newInteraction = await interactionReply.awaitMessageComponent({
-        componentType: ComponentType.StringSelect,
+      const newInteraction = await interaction.awaitModalSubmit({
         time: 5 * 60 * 1000, // 5 minutes (more than enough time)
         filter: (i) => i.user.id === interaction.user.id,
       });
 
-      const requestor = interaction.user;
-      const requestorAsMember = interaction.inCachedGuild()
-        ? interaction.member
-        : null;
+      const repliesChosen = newInteraction.fields.getStringSelectValues('replyWithIssueSelectMenu');
+      const chosenResponses = responses.filter((r) => repliesChosen.includes(r.name))
 
-      const replyChosen = newInteraction.values[0];
-      const response = responses.find((r) => r.name == replyChosen);
-
-      if (!response) {
+      // if response already sent recently, do not send again
+      // unless this time there are extra responses selected
+      const _chosenResponses = chosenResponses.filter((r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`));
+      if (!chosenResponses.length || chosenResponses.length !== _chosenResponses.length) {
         newInteraction.reply({
-          content: 'Unknown reply option',
-          ephemeral: true,
+          content: 'Someone has already sent those responses recently!',
+          flags: MessageFlags.Ephemeral,
         });
         return;
       }
 
-      Promise.all([
-        targetMessage.reply({
-          embeds: [
-            {
-              ...response.reply,
-              footer: {
-                text: `Requested by ${requestorAsMember?.displayName || requestor.username}`,
-                icon_url:
-                  requestorAsMember?.displayAvatarURL() ||
-                  requestor.displayAvatarURL(),
-              },
-            },
-          ],
-        }),
+      await newInteraction.reply({
+        flags: MessageFlags.IsComponentsV2,
+        allowedMentions: {
+          users: [targetMessage.author.id],
+        },
+        components:
+          chosenResponses.map(option => {
+            const container = new ContainerBuilder()
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`### ${option.reply.title}`)
+              )
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`<@${targetMessage.author.id}> ${option.reply.description}`)
+              )
+            if (option.reply.image) {
+              container.addMediaGalleryComponents(
+                new MediaGalleryBuilder().addItems(
+                  new MediaGalleryItemBuilder().setURL(option.reply.image)
+                )
+              )
+            }
+            return container;
+          })
+      })
 
-        interaction.deleteReply(),
-      ]);
+      chosenResponses.map(({ name }) => responsesCache.push(`${targetMessage.id}-${name}`));
+      responsesCache.length = Math.min(responsesCache.length, 10);
     } catch (err) {
+      if ((err as any)?.code === "InteractionCollectorError" && (err as any)?.reason === "time") return
       console.error(err);
     }
   },

@@ -21,7 +21,7 @@ export const onMessage: OnMessageHandler = async (client, message) => {
     });
 
     const modLogChannel = client.channels.cache.get(MOD_LOG_CHANNEL_ID);
-    if (!modLogChannel?.isTextBased()) {
+    if (!modLogChannel?.isSendable()) {
       console.warn(
         `No mod-log channel found (using the ID ${MOD_LOG_CHANNEL_ID})!`
       );

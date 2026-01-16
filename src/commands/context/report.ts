@@ -1,6 +1,7 @@
 import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
+  InteractionContextType,
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
@@ -18,7 +19,7 @@ const warnedMessageIds: string[] = [];
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
     .setName('Report')
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
     .setType(ApplicationCommandType.Message),
 
@@ -52,7 +53,7 @@ export const command: ContextMenuCommand = {
 
     const channel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
 
-    if (!channel || !channel.isTextBased()) {
+    if (!channel || !channel.isSendable()) {
       console.error(
         `No mod-log channel found (using the ID ${process.env.MOD_LOG_CHANNEL_ID})!`
       );

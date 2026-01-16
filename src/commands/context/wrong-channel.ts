@@ -2,6 +2,7 @@ import {
   ActionRowBuilder,
   ApplicationCommandType,
   ContextMenuCommandBuilder,
+  InteractionContextType,
   ModalBuilder,
   PermissionFlagsBits,
   TextInputBuilder,
@@ -18,7 +19,7 @@ import { ContextMenuCommand } from '../../types';
 export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
     .setName('Wrong Channel')
-    .setDMPermission(false)
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setType(ApplicationCommandType.Message),
 
