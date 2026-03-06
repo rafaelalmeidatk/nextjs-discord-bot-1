@@ -1,6 +1,4 @@
 import {
-  ApplicationCommandType,
-  ContextMenuCommandBuilder,
   PermissionFlagsBits,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
@@ -11,15 +9,15 @@ import {
   ContainerBuilder,
   MediaGalleryItemBuilder,
   MediaGalleryBuilder,
-  ButtonStyle,
   ComponentType,
   ActionRowBuilder,
-  ButtonBuilder,
   InteractionContextType,
   DangerButtonBuilder,
   MessageContextCommandBuilder,
-  type APIStringSelectComponent,
-  type APILabelComponent,
+  APISelectMenuOption,
+  InteractionReplyOptions,
+  MessagePayload,
+  Channel,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -317,25 +315,37 @@ export const command: ContextMenuCommand = {
       modal.addLabelComponents(label);
     }
 
+    let modOnlyOptions = [] as APISelectMenuOption[];
     if (interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
+      modOnlyOptions.push({ label: "Delete their message", value: "delete-msg" });
+      modOnlyOptions.push({ label: "Delete their message & DM", value: "delete-msg:dm" });
+    }
+    if (interaction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) && targetMessage.channel.isThread() && targetMessage.channel.ownerId === targetMessage.author.id) {
+      modOnlyOptions.push({ label: "Delete their thread & DM", value: "delete-thread:dm" });
+    }
+    if (modOnlyOptions.length) {
       modal.addLabelComponents(
         new LabelBuilder()
           .setLabel('Mod only options')
           .setStringSelectMenuComponent(
             new StringSelectMenuBuilder()
               .setCustomId("mod-only-options")
-              .addOptions({ label: "Delete their message", value: "delete-msg" })
+              .addOptions(modOnlyOptions)
               .setRequired(false)
           )
       )
-    }
+    };
 
     // TODO: remove this and do properly when discord.js actually supports checkbox groups
     const _modal = modal.toJSON()
     _modal.components.map(e => {
       if (e.type === ComponentType.Label) {
         if (e.component.type === ComponentType.StringSelect) {
-          e.component.type = ComponentType.CheckboxGroup as any;
+          if (e.component.custom_id === 'mod-only-options') {
+            e.component.type = ComponentType.RadioGroup as any;
+          } else {
+            e.component.type = ComponentType.CheckboxGroup as any;
+          }
         }
       };
     })
@@ -368,24 +378,43 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      // if response already sent recently, do not send again
-      // unless this time there are extra responses selected
-      const _chosenResponses = chosenResponses.filter((r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`));
-      if (!chosenResponses.length || chosenResponses.length !== _chosenResponses.length) {
-        newInteraction.reply({
-          content: 'Someone has already sent those responses recently!',
-          flags: MessageFlags.Ephemeral,
-        });
-        return;
+      const modOptions = newInteraction.components.getRadioGroup("mod-only-options");
+      const deleteMessage = (modOptions === "delete-msg:dm" || modOptions === "delete-msg") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
+      const deleteThread = modOptions === "delete-thread:dm" && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) && targetMessage.channel.isThread() && targetMessage.channel.ownerId === targetMessage.author.id;
+      const dmMemberInstead = (deleteMessage || deleteThread) && modOptions.endsWith(":dm") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
+
+      if (!modOptions) {
+        // if response already sent recently, do not send again
+        // unless this time there are extra responses selected
+        const _chosenResponses = chosenResponses.filter((r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`));
+        if (!chosenResponses.length || chosenResponses.length !== _chosenResponses.length) {
+          newInteraction.reply({
+            content: 'Someone has already sent those responses recently!',
+            flags: MessageFlags.Ephemeral,
+          });
+          return;
+        }
       }
 
-      await newInteraction.reply({
+      const getParentChannelUrl = (channel: Channel) => {
+        if (channel.isThread() && channel.parent) return channel.parent.url
+        return channel.url;
+      };
+
+      const message = {
         flags: MessageFlags.IsComponentsV2,
         allowedMentions: {
           users: [targetMessage.author.id],
         },
-        components:
-          chosenResponses.map(option => {
+        components: [
+          dmMemberInstead && new TextDisplayBuilder()
+            .setContent(
+              `Your ${deleteThread ? 'thread' : 'message'} in ${deleteThread ? getParentChannelUrl(interaction.targetMessage.channel) : interaction.targetMessage.channel.url} **was deleted** because it was against the rules.` +
+              `\n> ${interaction.targetMessage.content.slice(0, 500).split("\n").join("\n> ")}` +
+              `\n\nPlease see the helpful tips below it to improve your future messages:`
+            ),
+
+          ...chosenResponses.map(option => {
             const container = new ContainerBuilder()
               .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(`### ${option.reply.title}`)
@@ -401,14 +430,35 @@ export const command: ContextMenuCommand = {
               )
             }
             return container;
-          })
-      })
+          }),
+        ].filter(e => !!e)
+      } satisfies InteractionReplyOptions | MessagePayload;
+
+      if (dmMemberInstead) {
+        const success = await newInteraction.user.send(message).catch(() => false);
+        if (!success) {
+          await newInteraction.reply({
+            content: 'Failed to send DM. They might have DMs from server members disabled.',
+            flags: MessageFlags.Ephemeral,
+          });
+          return;
+        } else {
+          await newInteraction.reply({
+            content: 'Sent the response in DM!',
+            flags: MessageFlags.Ephemeral,
+          });
+        }
+      } else {
+        await newInteraction.reply(message)
+      }
 
       chosenResponses.map(({ name }) => responsesCache.push(`${targetMessage.id}-${name}`));
       responsesCache.length = Math.min(responsesCache.length, 10);
 
-      const modOptions = newInteraction.components.getCheckboxGroup("mod-only-options");
-      if (modOptions.includes("delete-msg") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
+      if (deleteThread && targetMessage.channel.isThread()) {
+        await targetMessage.channel.delete(`Deleted by @${interaction.user.username} using Reply with Issue context menu command`);
+      }
+      else if (deleteMessage) {
         await targetMessage.delete();
       }
     } catch (err) {
