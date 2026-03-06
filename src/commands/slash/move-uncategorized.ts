@@ -5,18 +5,20 @@ import {
   Collection,
   EmbedBuilder,
   PermissionFlagsBits,
-  SlashCommandBuilder,
   InteractionContextType,
+  ChatInputCommandBuilder,
+  MessageFlags,
+  Colors,
 } from 'discord.js';
 import { SlashCommand } from '../../types';
 
 export const command: SlashCommand = {
-  data: new SlashCommandBuilder()
+  data: new ChatInputCommandBuilder()
     .setName('move-uncategorized')
     .setDescription('Moves uncategorized channels into a single category')
     .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .addChannelOption((option) =>
+    .addChannelOptions((option) =>
       option
         .setName('category')
         .setDescription('The category to move the channels')
@@ -41,9 +43,9 @@ export const command: SlashCommand = {
             new EmbedBuilder()
               .setTitle('Error')
               .setDescription('The channel must be a category')
-              .setColor('Red'),
+              .setColor(Colors.Red),
           ],
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
         return;
       }
@@ -64,9 +66,9 @@ export const command: SlashCommand = {
           new EmbedBuilder()
             .setTitle('Error')
             .setDescription('No uncategorized channels found')
-            .setColor('Red'),
+            .setColor(Colors.Red),
         ],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -75,7 +77,7 @@ export const command: SlashCommand = {
       embeds: [
         new EmbedBuilder()
           .setTitle('Moving channels...')
-          .setColor('Blue')
+          .setColor(Colors.Blue)
           .setDescription(
             `Moving ${uncategorizedChannels.size} channels to \`${category.name}\`...`
           ),
@@ -89,9 +91,9 @@ export const command: SlashCommand = {
     const successCount = res.filter((r) => r.status === 'fulfilled').length;
     const failureCount = res.filter((r) => r.status === 'rejected').length;
 
-    let color: ColorResolvable = 'Yellow';
-    if (failureCount === 0) color = 'Green';
-    if (successCount === 0) color = 'Red';
+    let color: typeof Colors[keyof typeof Colors] = Colors.Yellow;
+    if (failureCount === 0) color = Colors.Green;
+    if (successCount === 0) color = Colors.Red;
 
     let description = '';
     if (successCount > 0) {
@@ -109,7 +111,7 @@ export const command: SlashCommand = {
       }
     }
 
-    await reply.edit({
+    await reply?.resource?.message?.edit({
       embeds: [
         new EmbedBuilder()
           .setTitle('Finished moving channels!')

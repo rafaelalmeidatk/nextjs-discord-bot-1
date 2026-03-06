@@ -1,4 +1,4 @@
-import { ActionRowBuilder, AllowedMentionsTypes, ButtonBuilder, ButtonStyle, ContainerBuilder, MediaGalleryBuilder, MediaGalleryComponent, MediaGalleryItemBuilder, MessageCreateOptions, MessageEditOptions, MessageFlags, MessagePayloadOption, SectionBuilder, TextChannel, TextDisplayBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ContainerBuilder, LinkButtonBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, MessageCreateOptions, MessageEditOptions, MessageFlags, TextChannel, TextDisplayBuilder } from 'discord.js';
 import { OnStartupHandler } from '../types';
 import {
   FEEDBACK_CHANNEL_ID,
@@ -79,21 +79,18 @@ We are always looking to improve the server. Feel free to share your ideas or op
 
 More tips: <https://stackoverflow.com/help/how-to-ask>
 `)),
-    new ActionRowBuilder<ButtonBuilder>()
+    new ActionRowBuilder()
       .addComponents(
-        new ButtonBuilder()
+        new LinkButtonBuilder()
           .setEmoji({ id: "1065672519144714322", name: "next1" })
           .setLabel("Website")
-          .setStyle(ButtonStyle.Link)
           .setURL("https://nextjs.org/"),
-        new ButtonBuilder()
+        new LinkButtonBuilder()
           .setEmoji({ id: "1119818837542576208", name: "github" })
           .setLabel("GitHub")
-          .setStyle(ButtonStyle.Link)
           .setURL("https://github.com/vercel/next.js"),
-        new ButtonBuilder()
+        new LinkButtonBuilder()
           .setLabel("#help-forum")
-          .setStyle(ButtonStyle.Link)
           .setURL("https://discord.com/channels/752553802359505017/1007476603422527558")
       )
   ]
@@ -122,7 +119,7 @@ export const onStartup: OnStartupHandler = async (client) => {
     );
     return;
   }
-  
+
   const channelMessages = await channel.messages.fetch({ limit: 100 });
 
   // Filter only the messages from the bot

@@ -37,26 +37,25 @@ for (const featureFile of featureFiles) {
   features.push(feature);
 }
 
-client.on('clientReady', () => {
+client.on(Events.ClientReady, () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   features.forEach((f) => f.onStartup?.(client));
 });
 
+const slashCommandsByName = new Map(slashCommands.map((cmd) => [cmd.data.toJSON().name, cmd]));
+const contextMenuCommandsByName = new Map(contextMenuCommands.map((cmd) => [cmd.data.toJSON().name, cmd]));
+
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isChatInputCommand()) {
-    slashCommands
-      .find((c) => c.data.name === interaction.commandName)
-      ?.execute(interaction);
+    slashCommandsByName.get(interaction.commandName)?.execute(interaction);
   }
 
   if (interaction.isMessageContextMenuCommand()) {
-    contextMenuCommands
-      .find((c) => c.data.name === interaction.commandName)
-      ?.execute(interaction);
+    contextMenuCommandsByName.get(interaction.commandName)?.execute(interaction);
   }
 });
 
-client.on('messageCreate', (message) => {
+client.on(Events.MessageCreate, (message) => {
   if (message.author.bot) return;
 
   // if user types into the intros channel, give them the verified role
@@ -69,7 +68,7 @@ client.on('messageCreate', (message) => {
   features.forEach((f) => f.onMessage?.(client, message));
 });
 
-client.on('messageDelete', async (message) => {
+client.on(Events.MessageDelete, async (message) => {
   // if user deletes the original message for a thread, delete the thread
   if (message.channelId !== message.id) return
   if (!message.inGuild()) return
@@ -96,7 +95,7 @@ client.on('messageDelete', async (message) => {
   }
 });
 
-client.on('messageReactionAdd', async (reaction, user) => {
+client.on(Events.MessageReactionAdd, async (reaction, user) => {
   if (user.partial) {
     try {
       await user.fetch();
@@ -127,7 +126,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
   }
 });
 
-client.on('messageReactionRemove', async (reaction, user) => {
+client.on(Events.MessageReactionRemove, async (reaction, user) => {
   if (user.partial) {
     try {
       await user.fetch();
@@ -160,7 +159,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
   }
 });
 
-client.on("threadUpdate", (oldChannel, channel) => {
+client.on(Events.ThreadUpdate, (oldChannel, channel) => {
   // make sure the rule threads stay pinned
   const threads = ['1138338531983491154', '1159350273056190524']
 
