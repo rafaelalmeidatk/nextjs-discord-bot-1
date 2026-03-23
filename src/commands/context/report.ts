@@ -1,7 +1,7 @@
 import {
+  ApplicationCommandType,
+  ContextMenuCommandBuilder,
   InteractionContextType,
-  MessageContextCommandBuilder,
-  MessageFlags,
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
@@ -17,10 +17,11 @@ import { isStaff } from '../../utils';
 const warnedMessageIds: string[] = [];
 
 export const command: ContextMenuCommand = {
-  data: new MessageContextCommandBuilder()
+  data: new ContextMenuCommandBuilder()
     .setName('Report')
     .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
+    .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
     const { client, guild, user, targetMessage } = interaction;
@@ -31,7 +32,7 @@ export const command: ContextMenuCommand = {
       interaction.reply({
         content:
           'Thanks, the message has been reported and the moderators have been notified',
-        flags: MessageFlags.Ephemeral,
+        ephemeral: true,
       });
     };
 
@@ -45,7 +46,7 @@ export const command: ContextMenuCommand = {
       // Stop this way of pinging mods for code help plz
       interaction.reply({
         content: 'You cannot report your own message',
-        flags: MessageFlags.Ephemeral,
+        ephemeral: true,
       });
       return;
     }
@@ -59,7 +60,7 @@ export const command: ContextMenuCommand = {
 
       interaction.reply({
         content: 'Something went wrong, please try again later',
-        flags: MessageFlags.Ephemeral,
+        ephemeral: true,
       });
 
       return;
@@ -110,7 +111,7 @@ export const command: ContextMenuCommand = {
     if (isUserStaff) {
       interaction.reply({
         content: 'Message logged in the mod channel',
-        flags: MessageFlags.Ephemeral,
+        ephemeral: true,
       });
     } else {
       sendSuccessMessage();

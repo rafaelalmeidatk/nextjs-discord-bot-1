@@ -1,7 +1,8 @@
 import {
   PermissionFlagsBits,
-  StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
+  CheckboxGroupBuilder,
+  CheckboxGroupOptionBuilder,
+  RadioGroupBuilder,
   ModalBuilder,
   LabelBuilder,
   MessageFlags,
@@ -12,12 +13,14 @@ import {
   ComponentType,
   ActionRowBuilder,
   InteractionContextType,
-  DangerButtonBuilder,
-  MessageContextCommandBuilder,
   APISelectMenuOption,
   InteractionReplyOptions,
   MessagePayload,
   Channel,
+  ContextMenuCommandBuilder,
+  ApplicationCommandType,
+  ButtonBuilder,
+  ButtonStyle
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -210,10 +213,11 @@ export const responses: Option[] = [
 const responsesCache = [] as `${string}-${string}`[]; // msgId-responseNum
 
 export const command: ContextMenuCommand = {
-  data: new MessageContextCommandBuilder()
+  data: new ContextMenuCommandBuilder()
     .setName('Reply with issue...')
     .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
+    .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
     const { targetMessage } = interaction;
@@ -236,10 +240,11 @@ export const command: ContextMenuCommand = {
       const reply = await interaction.reply({
         content: 'Would you like to delete this reply?',
         components: [
-          new ActionRowBuilder().addComponents(
-            new DangerButtonBuilder()
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
               .setCustomId('deleteReplyWithIssue')
               .setLabel('Delete')
+              .setStyle(ButtonStyle.Danger)
           )
         ],
         flags: MessageFlags.Ephemeral,
@@ -285,7 +290,7 @@ export const command: ContextMenuCommand = {
       .setCustomId('replyWithIssue')
       .setTitle('Reply with Issue')
 
-    const categoryCheckboxOptions = {} as Record<Categories | "other", StringSelectMenuOptionBuilder[]>;
+    const categoryCheckboxOptions = {} as Record<Categories | "other", CheckboxGroupOptionBuilder[]>;
 
     for (const response of responses) {
       const category = response.category || "other";
@@ -293,7 +298,7 @@ export const command: ContextMenuCommand = {
         categoryCheckboxOptions[category] = [];
       }
 
-      const option = new StringSelectMenuOptionBuilder()
+      const option = new CheckboxGroupOptionBuilder()
         .setLabel(response.name)
         .setValue(response.name)
       if (response.description) option.setDescription(response.description);
@@ -305,7 +310,7 @@ export const command: ContextMenuCommand = {
       const categoryInfo = categories[category as Categories] || categories.other;
       const label = new LabelBuilder()
         .setLabel(categoryInfo.title)
-        .setStringSelectMenuComponent(new StringSelectMenuBuilder()
+        .setCheckboxGroupComponent(new CheckboxGroupBuilder()
           .setCustomId('replyWithIssue:' + category)
           .setOptions(options)
           .setRequired(false)
@@ -327,30 +332,15 @@ export const command: ContextMenuCommand = {
       modal.addLabelComponents(
         new LabelBuilder()
           .setLabel('Mod only options')
-          .setStringSelectMenuComponent(
-            new StringSelectMenuBuilder()
+          .setRadioGroupComponent(
+            new RadioGroupBuilder()
               .setCustomId("mod-only-options")
               .addOptions(modOnlyOptions)
               .setRequired(false)
           )
       )
     };
-
-    // TODO: remove this and do properly when discord.js actually supports checkbox groups
-    const _modal = modal.toJSON()
-    _modal.components.map(e => {
-      if (e.type === ComponentType.Label) {
-        if (e.component.type === ComponentType.StringSelect) {
-          if (e.component.custom_id === 'mod-only-options') {
-            e.component.type = ComponentType.RadioGroup as any;
-          } else {
-            e.component.type = ComponentType.CheckboxGroup as any;
-          }
-        }
-      };
-    })
-
-    await interaction.showModal(_modal);
+    await interaction.showModal(modal);
 
     try {
       // wait for a a chosen option
@@ -361,7 +351,7 @@ export const command: ContextMenuCommand = {
 
       const repliesChosen = [] as string[];
       for (const category of Object.keys(categories)) {
-        repliesChosen.push(...newInteraction.components.getCheckboxGroup('replyWithIssue:' + category))
+        repliesChosen.push(...newInteraction.fields.getCheckboxGroup('replyWithIssue:' + category))
       }
       const chosenResponses = responses.filter((r) => repliesChosen.includes(r.name))
       if (chosenResponses.length === 0) {
@@ -378,7 +368,7 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      const modOptions = newInteraction.components.getRadioGroup("mod-only-options");
+      const modOptions = newInteraction.fields.getRadioGroup("mod-only-options");
       const deleteMessage = (modOptions === "delete-msg:dm" || modOptions === "delete-msg") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
       const deleteThread = modOptions === "delete-thread:dm" && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) && targetMessage.channel.isThread() && targetMessage.channel.ownerId === targetMessage.author.id;
       const dmMemberInstead = (deleteMessage || deleteThread) && modOptions.endsWith(":dm") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)

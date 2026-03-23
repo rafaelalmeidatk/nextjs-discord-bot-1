@@ -2,8 +2,6 @@ import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
   InteractionContextType,
-  MessageContextCommandBuilder,
-  MessageFlags,
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
@@ -18,10 +16,11 @@ import { logAndDelete } from '../../utils';
 const NAME = 'No Job Posts';
 
 export const command: ContextMenuCommand = {
-  data: new MessageContextCommandBuilder()
+  data: new ContextMenuCommandBuilder()
     .setName(NAME)
     .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
     const { targetMessage, client } = interaction;
@@ -47,7 +46,7 @@ Ignoring this warning will result in the account being banned from the server.
         ],
       }),
       interaction.reply({
-        flags: MessageFlags.Ephemeral,
+        ephemeral: true,
         content: 'Ok!',
       }),
     ]);

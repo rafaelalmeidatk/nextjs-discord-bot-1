@@ -1,8 +1,8 @@
 import {
+  ActionRowBuilder,
+  ApplicationCommandType,
+  ContextMenuCommandBuilder,
   InteractionContextType,
-  LabelBuilder,
-  MessageContextCommandBuilder,
-  MessageFlags,
   ModalBuilder,
   PermissionFlagsBits,
   TextInputBuilder,
@@ -17,10 +17,11 @@ import { ContextMenuCommand } from '../../types';
  */
 
 export const command: ContextMenuCommand = {
-  data: new MessageContextCommandBuilder()
+  data: new ContextMenuCommandBuilder()
     .setName('Wrong Channel')
     .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
     const { targetMessage } = interaction;
@@ -29,16 +30,15 @@ export const command: ContextMenuCommand = {
     const modal = new ModalBuilder()
       .setCustomId('wrongChannel')
       .setTitle('Delete wrong channel message')
-      .addLabelComponents(
-        new LabelBuilder()
-          .setLabel("Message to user (not required)")
-          .setTextInputComponent(
-            new TextInputBuilder()
-              .setCustomId('modMessageInput')
-              .setValue('👋 Hey there. This message would fit better in #')
-              .setRequired(false)
-              .setStyle(TextInputStyle.Short)
-          )
+      .addComponents(
+        new ActionRowBuilder<TextInputBuilder>().addComponents(
+          new TextInputBuilder()
+            .setCustomId('modMessageInput')
+            .setLabel('Message to user (not required)')
+            .setValue('👋 Hey there. This message would fit better in #')
+            .setRequired(false)
+            .setStyle(TextInputStyle.Short)
+        )
       );
 
     await interaction.showModal(modal);
@@ -48,7 +48,7 @@ export const command: ContextMenuCommand = {
         time: 5 * 60 * 1000,
         filter: (i) => i.user.id === interaction.user.id,
       });
-      const modMessage = submit.components.getTextInputValue('modMessageInput');
+      const modMessage = submit.fields.getTextInputValue('modMessageInput');
 
       await Promise.all([
         targetMessage.delete(),
@@ -64,7 +64,7 @@ ${modMessage ? `Moderator message: \`\`\`${modMessage}\`\`\`` : ''}`,
           ],
         }),
         submit.reply({
-          flags: MessageFlags.Ephemeral,
+          ephemeral: true,
           content: 'Ok!',
         }),
       ]);

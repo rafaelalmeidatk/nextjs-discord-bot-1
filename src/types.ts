@@ -5,8 +5,8 @@ import {
   Message,
   MessageContextMenuCommandInteraction,
   MessageReaction,
+  SlashCommandOptionsOnlyBuilder,
   User,
-  type ChatInputCommandBuilder,
 } from 'discord.js';
 
 /* --------------------
@@ -36,7 +36,7 @@ export type FeatureFile = {
 };
 
 export type SlashCommand = {
-  data: ChatInputCommandBuilder;
+  data: SlashCommandOptionsOnlyBuilder;
   execute: (interaction: ChatInputCommandInteraction) => void | Promise<void>;
 };
 
