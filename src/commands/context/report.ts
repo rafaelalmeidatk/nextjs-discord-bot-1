@@ -2,6 +2,7 @@ import {
   ApplicationCommandType,
   ContextMenuCommandBuilder,
   InteractionContextType,
+  MessageFlags,
   PermissionFlagsBits,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
@@ -46,7 +47,7 @@ export const command: ContextMenuCommand = {
       // Stop this way of pinging mods for code help plz
       interaction.reply({
         content: 'You cannot report your own message',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
       return;
     }
@@ -60,14 +61,14 @@ export const command: ContextMenuCommand = {
 
       interaction.reply({
         content: 'Something went wrong, please try again later',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
 
       return;
     }
 
-    const author = await guild.members.fetch(targetMessage.author.id);
-    const userGuildMember = await guild.members.fetch(user.id);
+    const author = await guild.members.fetch(targetMessage.author.id).catch(() => targetMessage.author);
+    const userGuildMember = await guild.members.fetch(user.id).catch(() => null);
     const isUserStaff = isStaff(userGuildMember);
 
     channel.send({
@@ -101,8 +102,8 @@ export const command: ContextMenuCommand = {
             },
           ],
           footer: {
-            icon_url: userGuildMember.displayAvatarURL(),
-            text: `Reported by ${userGuildMember.displayName}`,
+            icon_url: (userGuildMember || user).displayAvatarURL(),
+            text: `Reported by ${(userGuildMember || user).displayName}`,
           },
         },
       ],
@@ -111,7 +112,7 @@ export const command: ContextMenuCommand = {
     if (isUserStaff) {
       interaction.reply({
         content: 'Message logged in the mod channel',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     } else {
       sendSuccessMessage();
