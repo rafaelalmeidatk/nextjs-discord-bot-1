@@ -28,7 +28,7 @@ const RULE_MESSAGE: MessageCreateOptions & MessageEditOptions = {
         new MediaGalleryBuilder()
           .addItems(
             new MediaGalleryItemBuilder()
-              .setURL('https://cdn.discordapp.com/attachments/574725363922501719/1108130187503227005/nextjs.png')
+              .setURL('https://cdn.discordapp.com/attachments/843997308616966145/1488482056433438730/nextjs.png')
               .setDescription('Next.js Logo')
           )
       )
