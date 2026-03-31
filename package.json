@@ -13,7 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
-    "discord.js": "npm:@riskymh/discord.js@^14.25.2",
+    "discord.js": "^14.26.0",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
