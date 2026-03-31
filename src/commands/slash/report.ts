@@ -17,7 +17,9 @@ import { SlashCommand } from '../../types';
 export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('report')
-    .setDescription('Send a report to the moderators. Opens a modal to fill out the report.')
+    .setDescription(
+      'Send a report to the moderators. Opens a modal to fill out the report.'
+    )
     .setContexts(InteractionContextType.Guild),
 
   async execute(interaction) {
@@ -62,12 +64,11 @@ export const command: SlashCommand = {
           ),
         new LabelBuilder()
           .setLabel('Urgent')
-          .setDescription('Is this issue urgent and requires immediate attention from the moderators?')
-          .setCheckboxComponent(
-            new CheckboxBuilder().setCustomId('urgent')
-          ),
+          .setDescription(
+            'Is this issue urgent and requires immediate attention from the moderators?'
+          )
+          .setCheckboxComponent(new CheckboxBuilder().setCustomId('urgent'))
       );
-
 
     await interaction.showModal(modal);
 
@@ -79,7 +80,8 @@ export const command: SlashCommand = {
       });
 
       const title = newInteraction.fields.getTextInputValue('title');
-      const description = newInteraction.fields.getTextInputValue('description');
+      const description =
+        newInteraction.fields.getTextInputValue('description');
       const attachments = newInteraction.fields.getUploadedFiles('attachments');
       const urgent = newInteraction.fields.getCheckbox('urgent');
 
@@ -105,16 +107,24 @@ export const command: SlashCommand = {
 
       const userMember = await guild.members.fetch(user.id).catch(() => null);
 
-      const files = attachments ? await Promise.all(
-        attachments.map(async (attachment, index) => {
-          const response = await fetch(attachment.url);
-          const buffer = await response.arrayBuffer();
-          return new AttachmentBuilder(Buffer.from(buffer), { name: `${index}_${attachment.name}`, description: attachment.description ?? "Uploaded file from user" });
-        })
-      ) : undefined;
+      const files = attachments
+        ? await Promise.all(
+            attachments.map(async (attachment, index) => {
+              const response = await fetch(attachment.url);
+              const buffer = await response.arrayBuffer();
+              return new AttachmentBuilder(Buffer.from(buffer), {
+                name: `${index}_${attachment.name}`,
+                description:
+                  attachment.description ?? 'Uploaded file from user',
+              });
+            })
+          )
+        : undefined;
 
       const imageExtentions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
-      const imageAttachments = files?.filter(att => imageExtentions.some(ext => att.name?.endsWith(ext)));
+      const imageAttachments = files?.filter((att) =>
+        imageExtentions.some((ext) => att.name?.endsWith(ext))
+      );
 
       await channel.send({
         content: urgent ? `<@&${process.env.MODERATOR_ROLE_ID}>` : undefined,
@@ -127,34 +137,46 @@ export const command: SlashCommand = {
               name: (userMember || user).displayName ?? 'Unknown user',
               icon_url: (userMember || user).displayAvatarURL(),
             },
-            image: imageAttachments?.[0] ? { url: `attachment://${imageAttachments[0].name}` } : undefined,
+            image: imageAttachments?.[0]
+              ? { url: `attachment://${imageAttachments[0].name}` }
+              : undefined,
             // url needed so that it "groups" many attachments together and shows a nice gallery if there are multiple images, instead of showing them as separate embeds
-            url: imageAttachments && imageAttachments.length > 1 ? `https://discord.com/user/${user.id}` : undefined,
+            url:
+              imageAttachments && imageAttachments.length > 1
+                ? `https://discord.com/user/${user.id}`
+                : undefined,
           },
-          ...imageAttachments && imageAttachments.length > 1 ? imageAttachments.slice(1).map((file, index) => ({
-            url: `https://discord.com/user/${user.id}`,
-            image: {
-              url: `attachment://${file.name}`,
-            },
-          })) : [],
+          ...(imageAttachments && imageAttachments.length > 1
+            ? imageAttachments.slice(1).map((file, index) => ({
+                url: `https://discord.com/user/${user.id}`,
+                image: {
+                  url: `attachment://${file.name}`,
+                },
+              }))
+            : []),
         ],
-        files
+        files,
       });
 
       if (newInteraction.deferred) {
         await newInteraction.editReply({
-          content: 'Your report has been submitted to the moderators. Thank you for helping us keep the community safe!',
+          content:
+            'Your report has been submitted to the moderators. Thank you for helping us keep the community safe!',
         });
       } else {
         await newInteraction.reply({
-          content: 'Your report has been submitted to the moderators. Thank you for helping us keep the community safe!',
+          content:
+            'Your report has been submitted to the moderators. Thank you for helping us keep the community safe!',
           flags: MessageFlags.Ephemeral,
         });
       }
-
     } catch (err) {
-      if ((err as any)?.code === "InteractionCollectorError" && (err as any)?.toString()?.includes("time")) return
+      if (
+        (err as any)?.code === 'InteractionCollectorError' &&
+        (err as any)?.toString()?.includes('time')
+      )
+        return;
       console.error(err);
     }
-  }
+  },
 };

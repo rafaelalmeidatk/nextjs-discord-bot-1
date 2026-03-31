@@ -67,8 +67,12 @@ export const command: ContextMenuCommand = {
       return;
     }
 
-    const author = await guild.members.fetch(targetMessage.author.id).catch(() => targetMessage.author);
-    const userGuildMember = await guild.members.fetch(user.id).catch(() => null);
+    const author = await guild.members
+      .fetch(targetMessage.author.id)
+      .catch(() => targetMessage.author);
+    const userGuildMember = await guild.members
+      .fetch(user.id)
+      .catch(() => null);
     const isUserStaff = isStaff(userGuildMember);
 
     channel.send({

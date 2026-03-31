@@ -20,7 +20,7 @@ import {
   ContextMenuCommandBuilder,
   ApplicationCommandType,
   ButtonBuilder,
-  ButtonStyle
+  ButtonStyle,
 } from 'discord.js';
 import { ContextMenuCommand } from '../../types';
 import {
@@ -40,18 +40,23 @@ type Option = {
 
 type Categories = 'wrong-place' | 'message-help' | 'other';
 
-export const categories: Record<Categories, { title: string; description?: string }> = {
-  "wrong-place": {
-    title: "Wrong Place",
-    description: "Help the user understand they are in the wrong channel/place."
+export const categories: Record<
+  Categories,
+  { title: string; description?: string }
+> = {
+  'wrong-place': {
+    title: 'Wrong Place',
+    description:
+      'Help the user understand they are in the wrong channel/place.',
   },
-  "message-help": {
-    title: "Message Help",
-    description: "Provide assistance with how the user can improve their messages."
+  'message-help': {
+    title: 'Message Help',
+    description:
+      'Provide assistance with how the user can improve their messages.',
   },
-  "other": {
-    title: "Other Helpful Options"
-  }
+  other: {
+    title: 'Other Helpful Options',
+  },
 };
 
 export const responses: Option[] = [
@@ -149,20 +154,21 @@ export const responses: Option[] = [
     },
   },
   {
-    name: "Mark answer",
-    description: "Explains how to mark an answer as the solution",
+    name: 'Mark answer',
+    description: 'Explains how to mark an answer as the solution',
     reply: {
-      title: "Mark an answer as the solution",
+      title: 'Mark an answer as the solution',
       description: [
-        "To mark the message as solution:",
-        "1. Hover over the message you want to mark as the solution.",
-        "2. Right click the message Click the three dots that appear on the right side. ",
+        'To mark the message as solution:',
+        '1. Hover over the message you want to mark as the solution.',
+        '2. Right click the message Click the three dots that appear on the right side. ',
         "3. You'll see a menu which should have the option of `Apps`. Hover Over it.",
-        "4. Click on the `Mark as Answer` option.",
-        "Note: If you don't see the `Mark as Answer` option or `Apps` option, restart/update your discord app! "
-      ].join("\n"),
-      image: 'https://cdn.discordapp.com/attachments/1043615796787683408/1117191182133501962/image.png',
-    }
+        '4. Click on the `Mark as Answer` option.',
+        "Note: If you don't see the `Mark as Answer` option or `Apps` option, restart/update your discord app! ",
+      ].join('\n'),
+      image:
+        'https://cdn.discordapp.com/attachments/1043615796787683408/1117191182133501962/image.png',
+    },
   },
   {
     name: 'Promotion',
@@ -184,8 +190,8 @@ export const responses: Option[] = [
       title: 'Job posts are not allowed in the server',
       description: [
         `We do not allow job posts in this server, unless it's in the context of a discussion.`,
-        `You may check the latest official job threads in the Vercel Community: https://community.vercel.com/tag/hiring`
-      ].join("\n"),
+        `You may check the latest official job threads in the Vercel Community: https://community.vercel.com/tag/hiring`,
+      ].join('\n'),
     },
   },
   {
@@ -208,7 +214,6 @@ export const responses: Option[] = [
   },
 ];
 
-
 // cache of last 10 previous responses to avoid duplicates
 const responsesCache = [] as `${string}-${string}`[]; // msgId-responseNum
 
@@ -226,13 +231,14 @@ export const command: ContextMenuCommand = {
     if (!interaction.isMessageContextMenuCommand()) return;
 
     if (
-      targetMessage.author.id === interaction.applicationId
-      && targetMessage.interactionMetadata?.user.id === interaction.user.id
+      targetMessage.author.id === interaction.applicationId &&
+      targetMessage.interactionMetadata?.user.id === interaction.user.id
     ) {
       // only allow <1min to avoid killing history
-      if ((Date.now() - targetMessage.createdTimestamp) > 60 * 1000) {
+      if (Date.now() - targetMessage.createdTimestamp > 60 * 1000) {
         interaction.reply({
-          content: 'You can only delete this reply within the first minute after sending it.',
+          content:
+            'You can only delete this reply within the first minute after sending it.',
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -245,19 +251,19 @@ export const command: ContextMenuCommand = {
               .setCustomId('deleteReplyWithIssue')
               .setLabel('Delete')
               .setStyle(ButtonStyle.Danger)
-          )
+          ),
         ],
         flags: MessageFlags.Ephemeral,
         withResponse: true,
       });
 
-
       try {
-        const newInteraction = await reply.resource?.message?.awaitMessageComponent({
-          componentType: ComponentType.Button,
-          time: 0.5 * 60 * 1000,
-          filter: (i) => i.user.id === interaction.user.id,
-        });
+        const newInteraction =
+          await reply.resource?.message?.awaitMessageComponent({
+            componentType: ComponentType.Button,
+            time: 0.5 * 60 * 1000,
+            filter: (i) => i.user.id === interaction.user.id,
+          });
         if (newInteraction) {
           await newInteraction.update({
             content: 'Reply deleted.',
@@ -265,11 +271,17 @@ export const command: ContextMenuCommand = {
           });
 
           await targetMessage.delete();
-          setTimeout(() => newInteraction.deleteReply().catch(() => null), 2500);
+          setTimeout(
+            () => newInteraction.deleteReply().catch(() => null),
+            2500
+          );
         }
       } catch (err) {
-        if ((err as any)?.code === "InteractionCollectorError" && (err as any)?.toString?.().includes("time")) {
-          await interaction.deleteReply().catch(() => { });
+        if (
+          (err as any)?.code === 'InteractionCollectorError' &&
+          (err as any)?.toString?.().includes('time')
+        ) {
+          await interaction.deleteReply().catch(() => {});
         } else {
           console.error(err);
         }
@@ -288,45 +300,66 @@ export const command: ContextMenuCommand = {
 
     const modal = new ModalBuilder()
       .setCustomId('replyWithIssue')
-      .setTitle('Reply with Issue')
+      .setTitle('Reply with Issue');
 
-    const categoryCheckboxOptions = {} as Record<Categories | "other", CheckboxGroupOptionBuilder[]>;
+    const categoryCheckboxOptions = {} as Record<
+      Categories | 'other',
+      CheckboxGroupOptionBuilder[]
+    >;
 
     for (const response of responses) {
-      const category = response.category || "other";
+      const category = response.category || 'other';
       if (!categoryCheckboxOptions[category]) {
         categoryCheckboxOptions[category] = [];
       }
 
       const option = new CheckboxGroupOptionBuilder()
         .setLabel(response.name)
-        .setValue(response.name)
+        .setValue(response.name);
       if (response.description) option.setDescription(response.description);
 
       categoryCheckboxOptions[category].push(option);
     }
 
     for (const [category, options] of Object.entries(categoryCheckboxOptions)) {
-      const categoryInfo = categories[category as Categories] || categories.other;
+      const categoryInfo =
+        categories[category as Categories] || categories.other;
       const label = new LabelBuilder()
         .setLabel(categoryInfo.title)
-        .setCheckboxGroupComponent(new CheckboxGroupBuilder()
-          .setCustomId('replyWithIssue:' + category)
-          .setOptions(options)
-          .setRequired(false)
+        .setCheckboxGroupComponent(
+          new CheckboxGroupBuilder()
+            .setCustomId('replyWithIssue:' + category)
+            .setOptions(options)
+            .setRequired(false)
         );
-      if (categoryInfo.description) label.setDescription(categoryInfo.description);
+      if (categoryInfo.description)
+        label.setDescription(categoryInfo.description);
 
       modal.addLabelComponents(label);
     }
 
     let modOnlyOptions = [] as APISelectMenuOption[];
-    if (interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
-      modOnlyOptions.push({ label: "Delete their message", value: "delete-msg" });
-      modOnlyOptions.push({ label: "Delete their message & DM", value: "delete-msg:dm" });
+    if (
+      interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
+    ) {
+      modOnlyOptions.push({
+        label: 'Delete their message',
+        value: 'delete-msg',
+      });
+      modOnlyOptions.push({
+        label: 'Delete their message & DM',
+        value: 'delete-msg:dm',
+      });
     }
-    if (interaction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) && targetMessage.channel.isThread() && targetMessage.channel.ownerId === targetMessage.author.id) {
-      modOnlyOptions.push({ label: "Delete their thread & DM", value: "delete-thread:dm" });
+    if (
+      interaction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) &&
+      targetMessage.channel.isThread() &&
+      targetMessage.channel.ownerId === targetMessage.author.id
+    ) {
+      modOnlyOptions.push({
+        label: 'Delete their thread & DM',
+        value: 'delete-thread:dm',
+      });
     }
     if (modOnlyOptions.length) {
       modal.addLabelComponents(
@@ -334,12 +367,12 @@ export const command: ContextMenuCommand = {
           .setLabel('Mod only options')
           .setRadioGroupComponent(
             new RadioGroupBuilder()
-              .setCustomId("mod-only-options")
+              .setCustomId('mod-only-options')
               .addOptions(modOnlyOptions)
               .setRequired(false)
           )
-      )
-    };
+      );
+    }
     await interaction.showModal(modal);
 
     try {
@@ -351,9 +384,15 @@ export const command: ContextMenuCommand = {
 
       const repliesChosen = [] as string[];
       for (const category of Object.keys(categories)) {
-        repliesChosen.push(...newInteraction.fields.getCheckboxGroup('replyWithIssue:' + category))
+        repliesChosen.push(
+          ...newInteraction.fields.getCheckboxGroup(
+            'replyWithIssue:' + category
+          )
+        );
       }
-      const chosenResponses = responses.filter((r) => repliesChosen.includes(r.name))
+      const chosenResponses = responses.filter((r) =>
+        repliesChosen.includes(r.name)
+      );
       if (chosenResponses.length === 0) {
         await newInteraction.reply({
           content: 'No responses selected, not replying.',
@@ -368,16 +407,37 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      const modOptions = newInteraction.fields.getRadioGroup("mod-only-options");
-      const deleteMessage = (modOptions === "delete-msg:dm" || modOptions === "delete-msg") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
-      const deleteThread = modOptions === "delete-thread:dm" && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) && targetMessage.channel.isThread() && targetMessage.channel.ownerId === targetMessage.author.id;
-      const dmMemberInstead = (deleteMessage || deleteThread) && modOptions.endsWith(":dm") && newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
+      const modOptions =
+        newInteraction.fields.getRadioGroup('mod-only-options');
+      const deleteMessage =
+        (modOptions === 'delete-msg:dm' || modOptions === 'delete-msg') &&
+        newInteraction.memberPermissions?.has(
+          PermissionFlagsBits.ManageMessages
+        );
+      const deleteThread =
+        modOptions === 'delete-thread:dm' &&
+        newInteraction.memberPermissions?.has(
+          PermissionFlagsBits.ManageThreads
+        ) &&
+        targetMessage.channel.isThread() &&
+        targetMessage.channel.ownerId === targetMessage.author.id;
+      const dmMemberInstead =
+        (deleteMessage || deleteThread) &&
+        modOptions.endsWith(':dm') &&
+        newInteraction.memberPermissions?.has(
+          PermissionFlagsBits.ManageMessages
+        );
 
       if (!modOptions) {
         // if response already sent recently, do not send again
         // unless this time there are extra responses selected
-        const _chosenResponses = chosenResponses.filter((r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`));
-        if (!chosenResponses.length || chosenResponses.length !== _chosenResponses.length) {
+        const _chosenResponses = chosenResponses.filter(
+          (r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`)
+        );
+        if (
+          !chosenResponses.length ||
+          chosenResponses.length !== _chosenResponses.length
+        ) {
           newInteraction.reply({
             content: 'Someone has already sent those responses recently!',
             flags: MessageFlags.Ephemeral,
@@ -387,7 +447,7 @@ export const command: ContextMenuCommand = {
       }
 
       const getParentChannelUrl = (channel: Channel) => {
-        if (channel.isThread() && channel.parent) return channel.parent.url
+        if (channel.isThread() && channel.parent) return channel.parent.url;
         return channel.url;
       };
 
@@ -397,38 +457,50 @@ export const command: ContextMenuCommand = {
           users: [targetMessage.author.id],
         },
         components: [
-          dmMemberInstead && new TextDisplayBuilder()
-            .setContent(
-              `Your ${deleteThread ? 'thread' : 'message'} in ${deleteThread ? getParentChannelUrl(interaction.targetMessage.channel) : interaction.targetMessage.channel.url} **was deleted** because it was against the rules.` +
-              `\n> ${interaction.targetMessage.content.slice(0, 500).split("\n").join("\n> ")}` +
-              `\n\nPlease see the helpful tips below it to improve your future messages:`
+          dmMemberInstead &&
+            new TextDisplayBuilder().setContent(
+              `Your ${deleteThread ? 'thread' : 'message'} in ${
+                deleteThread
+                  ? getParentChannelUrl(interaction.targetMessage.channel)
+                  : interaction.targetMessage.channel.url
+              } **was deleted** because it was against the rules.` +
+                `\n> ${interaction.targetMessage.content
+                  .slice(0, 500)
+                  .split('\n')
+                  .join('\n> ')}` +
+                `\n\nPlease see the helpful tips below it to improve your future messages:`
             ),
 
-          ...chosenResponses.map(option => {
+          ...chosenResponses.map((option) => {
             const container = new ContainerBuilder()
               .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(`### ${option.reply.title}`)
               )
               .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`<@${targetMessage.author.id}> ${option.reply.description}`)
-              )
+                new TextDisplayBuilder().setContent(
+                  `<@${targetMessage.author.id}> ${option.reply.description}`
+                )
+              );
             if (option.reply.image) {
               container.addMediaGalleryComponents(
                 new MediaGalleryBuilder().addItems(
                   new MediaGalleryItemBuilder().setURL(option.reply.image)
                 )
-              )
+              );
             }
             return container;
           }),
-        ].filter(e => !!e)
+        ].filter((e) => !!e),
       } satisfies InteractionReplyOptions | MessagePayload;
 
       if (dmMemberInstead) {
-        const success = await newInteraction.user.send(message).catch(() => false);
+        const success = await newInteraction.user
+          .send(message)
+          .catch(() => false);
         if (!success) {
           await newInteraction.reply({
-            content: 'Failed to send DM. They might have DMs from server members disabled.',
+            content:
+              'Failed to send DM. They might have DMs from server members disabled.',
             flags: MessageFlags.Ephemeral,
           });
           return;
@@ -439,20 +511,27 @@ export const command: ContextMenuCommand = {
           });
         }
       } else {
-        await newInteraction.reply(message)
+        await newInteraction.reply(message);
       }
 
-      chosenResponses.map(({ name }) => responsesCache.push(`${targetMessage.id}-${name}`));
+      chosenResponses.map(({ name }) =>
+        responsesCache.push(`${targetMessage.id}-${name}`)
+      );
       responsesCache.length = Math.min(responsesCache.length, 10);
 
       if (deleteThread && targetMessage.channel.isThread()) {
-        await targetMessage.channel.delete(`Deleted by @${interaction.user.username} using Reply with Issue context menu command`);
-      }
-      else if (deleteMessage) {
+        await targetMessage.channel.delete(
+          `Deleted by @${interaction.user.username} using Reply with Issue context menu command`
+        );
+      } else if (deleteMessage) {
         await targetMessage.delete();
       }
     } catch (err) {
-      if ((err as any)?.code === "InteractionCollectorError" && (err as any)?.toString()?.includes("time")) return
+      if (
+        (err as any)?.code === 'InteractionCollectorError' &&
+        (err as any)?.toString()?.includes('time')
+      )
+        return;
       console.error(err);
     }
   },

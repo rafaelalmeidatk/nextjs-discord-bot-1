@@ -1,4 +1,16 @@
-import { ActionRowBuilder, AllowedMentionsTypes, ButtonBuilder, ButtonStyle, ContainerBuilder, MediaGalleryBuilder, MediaGalleryComponent, MediaGalleryItemBuilder, MessageCreateOptions, MessageEditOptions, MessageFlags, MessagePayloadOption, SectionBuilder, TextChannel, TextDisplayBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ContainerBuilder,
+  MediaGalleryBuilder,
+  MediaGalleryItemBuilder,
+  MessageCreateOptions,
+  MessageEditOptions,
+  MessageFlags,
+  TextChannel,
+  TextDisplayBuilder,
+} from 'discord.js';
 import { OnStartupHandler } from '../types';
 import {
   FEEDBACK_CHANNEL_ID,
@@ -21,16 +33,17 @@ import {
 const RULE_MESSAGE: MessageCreateOptions & MessageEditOptions = {
   flags: MessageFlags.IsComponentsV2,
   allowedMentions: {},
-  content: "",
+  content: '',
   components: [
     new ContainerBuilder()
       .addMediaGalleryComponents(
-        new MediaGalleryBuilder()
-          .addItems(
-            new MediaGalleryItemBuilder()
-              .setURL('https://cdn.discordapp.com/attachments/843997308616966145/1488482056433438730/nextjs.png')
-              .setDescription('Next.js Logo')
-          )
+        new MediaGalleryBuilder().addItems(
+          new MediaGalleryItemBuilder()
+            .setURL(
+              'https://cdn.discordapp.com/attachments/843997308616966145/1488482056433438730/nextjs.png'
+            )
+            .setDescription('Next.js Logo')
+        )
       )
       .addTextDisplayComponents(
         new TextDisplayBuilder().setContent(
@@ -39,21 +52,23 @@ const RULE_MESSAGE: MessageCreateOptions & MessageEditOptions = {
 📖 We abide by our Code of Conduct. Please read it: <https://github.com/vercel/next.js/blob/canary/CODE_OF_CONDUCT.md>
 
 ✨ Customize your profile in <id:customize> by adding your own name color or custom roles
-`)),
-    new ContainerBuilder()
-      .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `## 🔍 Here's a quick breakdown of our most popular channels
+`
+        )
+      ),
+    new ContainerBuilder().addTextDisplayComponents(
+      new TextDisplayBuilder().setContent(
+        `## 🔍 Here's a quick breakdown of our most popular channels
 
 <#${HELP_CHANNEL_ID}> — Ask for help with Next.js
 <#${SHOWCASE_CHANNEL_ID}> — Show off your Next.js projects
 <#${DISCUSSIONS_CHANNEL_ID}> — Engage in more in-depth and advanced discussions about Next.js (you can chat in the channel after being active in <#${HELP_CHANNEL_ID}>)
 <#${OFFTOPIC_CHANNEL_ID}> — Anything else you want to talk about
-`)),
-    new ContainerBuilder()
-      .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `## 📜 Server Rules
+`
+      )
+    ),
+    new ContainerBuilder().addTextDisplayComponents(
+      new TextDisplayBuilder().setContent(
+        `## 📜 Server Rules
 
 1. Be friendly, patient, and courteous of people's time and space. Do NOT directly ping/DM or annoy any member/moderators/etc.
 2. Be respectful. You can disagree, but this cannot be allowed to turn into a personal attack.
@@ -65,11 +80,12 @@ const RULE_MESSAGE: MessageCreateOptions & MessageEditOptions = {
 Most importantly, use common sense and keep in mind that this list of rules isn't exhaustive; please listen to what our moderators say.
 If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
 We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
-`)),
-    new ContainerBuilder()
-      .addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          `## ✍️ Tips to get help faster
+`
+      )
+    ),
+    new ContainerBuilder().addTextDisplayComponents(
+      new TextDisplayBuilder().setContent(
+        `## ✍️ Tips to get help faster
 
 1. Don't ask to ask, just ask: <https://dontasktoask.com>
 2. If you are facing an error, share the full error message and what you think might be causing it
@@ -78,26 +94,29 @@ We are always looking to improve the server. Feel free to share your ideas or op
 5. Share the project or a minimal reproduction of the issue, this allows people to investigate better the problem
 
 More tips: <https://stackoverflow.com/help/how-to-ask>
-`)),
-    new ActionRowBuilder<ButtonBuilder>()
-      .addComponents(
-        new ButtonBuilder()
-          .setEmoji({ id: "1065672519144714322", name: "next1" })
-          .setLabel("Website")
-          .setStyle(ButtonStyle.Link)
-          .setURL("https://nextjs.org/"),
-        new ButtonBuilder()
-          .setEmoji({ id: "1119818837542576208", name: "github" })
-          .setLabel("GitHub")
-          .setStyle(ButtonStyle.Link)
-          .setURL("https://github.com/vercel/next.js"),
-        new ButtonBuilder()
-          .setLabel("#help-forum")
-          .setStyle(ButtonStyle.Link)
-          .setURL("https://discord.com/channels/752553802359505017/1007476603422527558")
+`
       )
-  ]
-}
+    ),
+    new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setEmoji({ id: '1065672519144714322', name: 'next1' })
+        .setLabel('Website')
+        .setStyle(ButtonStyle.Link)
+        .setURL('https://nextjs.org/'),
+      new ButtonBuilder()
+        .setEmoji({ id: '1119818837542576208', name: 'github' })
+        .setLabel('GitHub')
+        .setStyle(ButtonStyle.Link)
+        .setURL('https://github.com/vercel/next.js'),
+      new ButtonBuilder()
+        .setLabel('#help-forum')
+        .setStyle(ButtonStyle.Link)
+        .setURL(
+          'https://discord.com/channels/752553802359505017/1007476603422527558'
+        )
+    ),
+  ],
+};
 
 const generateHash = (string: string) => {
   let hash = 0;
@@ -110,7 +129,7 @@ const generateHash = (string: string) => {
 
 for (const comp of RULE_MESSAGE.components || []) {
   const hash = generateHash(JSON.stringify(comp));
-  ; (comp as any).data.id = (hash);
+  (comp as any).data.id = hash;
 }
 
 export const onStartup: OnStartupHandler = async (client) => {
@@ -122,7 +141,7 @@ export const onStartup: OnStartupHandler = async (client) => {
     );
     return;
   }
-  
+
   const channelMessages = await channel.messages.fetch({ limit: 100 });
 
   // Filter only the messages from the bot
@@ -137,7 +156,8 @@ export const onStartup: OnStartupHandler = async (client) => {
   } else {
     // Kinda hacky way to check if the message components are the same
     const isSame =
-      RULE_MESSAGE.components?.length === channelMessageFromBot.components.length &&
+      RULE_MESSAGE.components?.length ===
+        channelMessageFromBot.components.length &&
       RULE_MESSAGE.components?.every((comp, index) => {
         const existingComp = channelMessageFromBot.components[index];
         return (comp as any).data.id === existingComp.id;
