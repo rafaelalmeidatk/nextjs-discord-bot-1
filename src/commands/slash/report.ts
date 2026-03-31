@@ -141,14 +141,13 @@ export const command: SlashCommand = {
               ? { url: `attachment://${imageAttachments[0].name}` }
               : undefined,
             // url needed so that it "groups" many attachments together and shows a nice gallery if there are multiple images, instead of showing them as separate embeds
-            url:
-              imageAttachments && imageAttachments.length > 1
-                ? `https://discord.com/user/${user.id}`
-                : undefined,
+            // but also so you can click on the "link" and go to the channel contenxt incase thats important 
+            // - if a message id doesn't exist, then discord uses slowflake to find messages arround same time instead, which is still good enough to find the possible context of the report
+            url: `https://discord.com/channels/${guild.id}/${interaction.channelId}/${interaction.id}`,
           },
           ...(imageAttachments && imageAttachments.length > 1
             ? imageAttachments.slice(1).map((file, index) => ({
-                url: `https://discord.com/user/${user.id}`,
+                url: `https://discord.com/channels/${guild.id}/${interaction.channelId}/${interaction.id}`,
                 image: {
                   url: `attachment://${file.name}`,
                 },
