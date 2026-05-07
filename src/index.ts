@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import discord, { Events, GatewayIntentBits, Partials, User } from 'discord.js';
-import './assert-env-vars';
+import { Client, Events, GatewayIntentBits, Partials, User } from 'discord.js';
+import './assert-env-vars.ts';
 
-import { FeatureFile } from './types';
-import { isJsOrTsFile } from './utils';
-import { slashCommands, contextMenuCommands } from './commands';
-import { HELP_CHANNEL_ID } from './constants';
+import type { FeatureFile } from './types.ts';
+import { isJsOrTsFile } from './utils.ts';
+import { slashCommands, contextMenuCommands } from './commands.ts';
+import { HELP_CHANNEL_ID } from './constants.ts';
 
 const INTRO_CHANNEL_ID = '766393115044216854';
 const VERIFIED_ROLE = '930202099264938084';
@@ -15,7 +15,7 @@ if (!process.env.DISCORD_BOT_TOKEN) {
   throw new Error('No bot token found!');
 }
 
-const client = new discord.Client({
+const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
@@ -25,17 +25,15 @@ const client = new discord.Client({
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-const features: FeatureFile[] = [];
 const featureFiles = fs
-  .readdirSync(path.resolve(__dirname, './features'))
-  // Look for files as TS (dev) or JS (built files)
+  .readdirSync(path.resolve(import.meta.dirname, './features'))
   .filter(isJsOrTsFile);
 
-for (const featureFile of featureFiles) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const feature = require(`./features/${featureFile}`) as FeatureFile;
-  features.push(feature);
-}
+const features: FeatureFile[] = await Promise.all(
+  featureFiles.map(
+    async (file) => (await import(`./features/${file}`)) as FeatureFile
+  )
+);
 
 client.on('clientReady', () => {
   console.log(`Logged in as ${client.user?.tag}!`);

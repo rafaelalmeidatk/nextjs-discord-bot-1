@@ -1,5 +1,5 @@
-import { OnMessageHandler } from '../types';
-import { isStaff, logAndDelete } from '../utils';
+import type { OnMessageHandler } from '../types.ts';
+import { isStaff, logAndDelete } from '../utils.ts';
 
 /**
  * Anti spam

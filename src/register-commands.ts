@@ -1,7 +1,7 @@
 import { REST, Routes } from 'discord.js';
-import './assert-env-vars';
+import './assert-env-vars.ts';
 
-import { allCommands } from './commands';
+import { allCommands } from './commands.ts';
 
 (async () => {
   const isDevRegister = process.env.DEV === 'true';

@@ -1,5 +1,5 @@
 import {
-  ColorResolvable,
+  type ColorResolvable,
   CategoryChannel,
   ChannelType,
   Collection,
@@ -8,7 +8,7 @@ import {
   SlashCommandBuilder,
   InteractionContextType,
 } from 'discord.js';
-import { SlashCommand } from '../../types';
+import type { SlashCommand } from '../../types.ts';
 
 export const command: SlashCommand = {
   data: new SlashCommandBuilder()

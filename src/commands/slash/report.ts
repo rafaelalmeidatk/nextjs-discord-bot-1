@@ -12,7 +12,7 @@ import {
   TextDisplayBuilder,
   SectionBuilder,
 } from 'discord.js';
-import { SlashCommand } from '../../types';
+import type { SlashCommand } from '../../types.ts';
 
 export const command: SlashCommand = {
   data: new SlashCommandBuilder()

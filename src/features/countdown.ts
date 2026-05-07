@@ -1,6 +1,6 @@
 import { VoiceChannel } from 'discord.js';
-import { OnStartupHandler } from '../types';
-import { remainingTime } from '../utils';
+import type { OnStartupHandler } from '../types.ts';
+import { remainingTime } from '../utils.ts';
 
 /**
  * Countdown module

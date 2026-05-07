@@ -1,5 +1,5 @@
 import { Client, GuildMember, Message, TextChannel, User } from 'discord.js';
-import { MOD_LOG_CHANNEL_ID } from './constants';
+import { MOD_LOG_CHANNEL_ID } from './constants.ts';
 
 const staffRoles = ['next.js', 'moderator', 'vercel'];
 

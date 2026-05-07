@@ -13,23 +13,23 @@ import {
   ComponentType,
   ActionRowBuilder,
   InteractionContextType,
-  APISelectMenuOption,
-  InteractionReplyOptions,
+  type APISelectMenuOption,
+  type InteractionReplyOptions,
   MessagePayload,
-  Channel,
+  type Channel,
   ContextMenuCommandBuilder,
   ApplicationCommandType,
   ButtonBuilder,
   ButtonStyle,
 } from 'discord.js';
-import { ContextMenuCommand } from '../../types';
+import type { ContextMenuCommand } from '../../types.ts';
 import {
   SHOWCASE_CHANNEL_ID,
   CONTENT_SHOWCASE_CHANNEL_ID,
   HELP_CHANNEL_ID,
   VERCEL_HELP_CHANNEL_ID,
   DISCUSSIONS_CHANNEL_ID,
-} from '../../constants';
+} from '../../constants.ts';
 
 type Option = {
   name: string;

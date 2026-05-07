@@ -5,13 +5,13 @@ import {
   ContainerBuilder,
   MediaGalleryBuilder,
   MediaGalleryItemBuilder,
-  MessageCreateOptions,
-  MessageEditOptions,
+  type MessageCreateOptions,
+  type MessageEditOptions,
   MessageFlags,
   TextChannel,
   TextDisplayBuilder,
 } from 'discord.js';
-import { OnStartupHandler } from '../types';
+import type { OnStartupHandler } from '../types.ts';
 import {
   FEEDBACK_CHANNEL_ID,
   DISCUSSIONS_CHANNEL_ID,
@@ -19,7 +19,7 @@ import {
   OFFTOPIC_CHANNEL_ID,
   RULES_CHANNEL_ID,
   SHOWCASE_CHANNEL_ID,
-} from '../constants';
+} from '../constants.ts';
 
 /**
  * Rules module

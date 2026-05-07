@@ -1,6 +1,6 @@
-import { OnMessageHandler } from '../types';
-import { isStaff, logAndDelete } from '../utils';
-import { HONEYPOT_CHANNEL_ID, MOD_LOG_CHANNEL_ID } from '../constants';
+import type { OnMessageHandler } from '../types.ts';
+import { isStaff, logAndDelete } from '../utils.ts';
+import { HONEYPOT_CHANNEL_ID, MOD_LOG_CHANNEL_ID } from '../constants.ts';
 
 /**
  * Honeypot Channel Feature

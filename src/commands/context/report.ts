@@ -5,8 +5,8 @@ import {
   MessageFlags,
   PermissionFlagsBits,
 } from 'discord.js';
-import { ContextMenuCommand } from '../../types';
-import { isStaff } from '../../utils';
+import type { ContextMenuCommand } from '../../types.ts';
+import { isStaff } from '../../utils.ts';
 
 /**
  * Report message command
