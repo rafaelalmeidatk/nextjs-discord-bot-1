@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const required = (name: string, val: string | undefined) =>
-  assert(val, `${name} is not defined`);
+const required = (name: string, val: string | undefined) => assert(val, `${name} is not defined`);
 
 const optional = (name: string, val: string | undefined) => {
   if (!val) {

@@ -31,8 +31,7 @@ export const command: ContextMenuCommand = {
 
     const sendSuccessMessage = () => {
       interaction.reply({
-        content:
-          'Thanks, the message has been reported and the moderators have been notified',
+        content: 'Thanks, the message has been reported and the moderators have been notified',
         ephemeral: true,
       });
     };
@@ -55,9 +54,7 @@ export const command: ContextMenuCommand = {
     const channel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
 
     if (!channel || !channel.isSendable()) {
-      console.error(
-        `No mod-log channel found (using the ID ${process.env.MOD_LOG_CHANNEL_ID})!`
-      );
+      console.error(`No mod-log channel found (using the ID ${process.env.MOD_LOG_CHANNEL_ID})!`);
 
       interaction.reply({
         content: 'Something went wrong, please try again later',
@@ -70,15 +67,11 @@ export const command: ContextMenuCommand = {
     const author = await guild.members
       .fetch(targetMessage.author.id)
       .catch(() => targetMessage.author);
-    const userGuildMember = await guild.members
-      .fetch(user.id)
-      .catch(() => null);
+    const userGuildMember = await guild.members.fetch(user.id).catch(() => null);
     const isUserStaff = isStaff(userGuildMember);
 
     channel.send({
-      content: !isUserStaff
-        ? `<@&${process.env.MODERATOR_ROLE_ID}>`
-        : undefined,
+      content: !isUserStaff ? `<@&${process.env.MODERATOR_ROLE_ID}>` : undefined,
       embeds: [
         {
           title: '⚠️ Message Reported',

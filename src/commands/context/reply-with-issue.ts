@@ -40,19 +40,14 @@ type Option = {
 
 type Categories = 'wrong-place' | 'message-help' | 'other';
 
-export const categories: Record<
-  Categories,
-  { title: string; description?: string }
-> = {
+export const categories: Record<Categories, { title: string; description?: string }> = {
   'wrong-place': {
     title: 'Wrong Place',
-    description:
-      'Help the user understand they are in the wrong channel/place.',
+    description: 'Help the user understand they are in the wrong channel/place.',
   },
   'message-help': {
     title: 'Message Help',
-    description:
-      'Provide assistance with how the user can improve their messages.',
+    description: 'Provide assistance with how the user can improve their messages.',
   },
   other: {
     title: 'Other Helpful Options',
@@ -71,8 +66,7 @@ export const responses: Option[] = [
   },
   {
     name: 'Discussions',
-    description:
-      "Explains why the user doesn't have access to the discussions channel",
+    description: "Explains why the user doesn't have access to the discussions channel",
     category: 'wrong-place',
     reply: {
       title: 'Access to Discussions Channel',
@@ -81,8 +75,7 @@ export const responses: Option[] = [
   },
   {
     name: 'Not Enough Info',
-    description:
-      'Replies with directions for questions with not enough information',
+    description: 'Replies with directions for questions with not enough information',
     category: 'message-help',
     reply: {
       title: 'Please add more information to your question',
@@ -103,8 +96,7 @@ export const responses: Option[] = [
   },
   {
     name: 'Improve Forum Question Title',
-    description:
-      'Tell the user to update their question title to make it more descriptive',
+    description: 'Tell the user to update their question title to make it more descriptive',
     category: 'message-help',
     reply: {
       title: 'Please improve the title of your question',
@@ -134,8 +126,7 @@ export const responses: Option[] = [
     category: 'message-help',
     reply: {
       title: "Don't ask to ask, just ask!",
-      description:
-        'Please just ask your question directly: https://dontasktoask.com.',
+      description: 'Please just ask your question directly: https://dontasktoask.com.',
     },
   },
   {
@@ -237,8 +228,7 @@ export const command: ContextMenuCommand = {
       // only allow <1min to avoid killing history
       if (Date.now() - targetMessage.createdTimestamp > 60 * 1000) {
         interaction.reply({
-          content:
-            'You can only delete this reply within the first minute after sending it.',
+          content: 'You can only delete this reply within the first minute after sending it.',
           flags: MessageFlags.Ephemeral,
         });
         return;
@@ -258,12 +248,11 @@ export const command: ContextMenuCommand = {
       });
 
       try {
-        const newInteraction =
-          await reply.resource?.message?.awaitMessageComponent({
-            componentType: ComponentType.Button,
-            time: 0.5 * 60 * 1000,
-            filter: (i) => i.user.id === interaction.user.id,
-          });
+        const newInteraction = await reply.resource?.message?.awaitMessageComponent({
+          componentType: ComponentType.Button,
+          time: 0.5 * 60 * 1000,
+          filter: (i) => i.user.id === interaction.user.id,
+        });
         if (newInteraction) {
           await newInteraction.update({
             content: 'Reply deleted.',
@@ -271,10 +260,7 @@ export const command: ContextMenuCommand = {
           });
 
           await targetMessage.delete();
-          setTimeout(
-            () => newInteraction.deleteReply().catch(() => null),
-            2500
-          );
+          setTimeout(() => newInteraction.deleteReply().catch(() => null), 2500);
         }
       } catch (err) {
         if (
@@ -298,9 +284,7 @@ export const command: ContextMenuCommand = {
       return;
     }
 
-    const modal = new ModalBuilder()
-      .setCustomId('replyWithIssue')
-      .setTitle('Reply with Issue');
+    const modal = new ModalBuilder().setCustomId('replyWithIssue').setTitle('Reply with Issue');
 
     const categoryCheckboxOptions = {} as Record<
       Categories | 'other',
@@ -322,26 +306,20 @@ export const command: ContextMenuCommand = {
     }
 
     for (const [category, options] of Object.entries(categoryCheckboxOptions)) {
-      const categoryInfo =
-        categories[category as Categories] || categories.other;
-      const label = new LabelBuilder()
-        .setLabel(categoryInfo.title)
-        .setCheckboxGroupComponent(
-          new CheckboxGroupBuilder()
-            .setCustomId('replyWithIssue:' + category)
-            .setOptions(options)
-            .setRequired(false)
-        );
-      if (categoryInfo.description)
-        label.setDescription(categoryInfo.description);
+      const categoryInfo = categories[category as Categories] || categories.other;
+      const label = new LabelBuilder().setLabel(categoryInfo.title).setCheckboxGroupComponent(
+        new CheckboxGroupBuilder()
+          .setCustomId('replyWithIssue:' + category)
+          .setOptions(options)
+          .setRequired(false)
+      );
+      if (categoryInfo.description) label.setDescription(categoryInfo.description);
 
       modal.addLabelComponents(label);
     }
 
     let modOnlyOptions = [] as APISelectMenuOption[];
-    if (
-      interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)
-    ) {
+    if (interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
       modOnlyOptions.push({
         label: 'Delete their message',
         value: 'delete-msg',
@@ -384,15 +362,9 @@ export const command: ContextMenuCommand = {
 
       const repliesChosen = [] as string[];
       for (const category of Object.keys(categories)) {
-        repliesChosen.push(
-          ...newInteraction.fields.getCheckboxGroup(
-            'replyWithIssue:' + category
-          )
-        );
+        repliesChosen.push(...newInteraction.fields.getCheckboxGroup('replyWithIssue:' + category));
       }
-      const chosenResponses = responses.filter((r) =>
-        repliesChosen.includes(r.name)
-      );
+      const chosenResponses = responses.filter((r) => repliesChosen.includes(r.name));
       if (chosenResponses.length === 0) {
         await newInteraction.reply({
           content: 'No responses selected, not replying.',
@@ -407,26 +379,19 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      const modOptions =
-        newInteraction.fields.getRadioGroup('mod-only-options');
+      const modOptions = newInteraction.fields.getRadioGroup('mod-only-options');
       const deleteMessage =
         (modOptions === 'delete-msg:dm' || modOptions === 'delete-msg') &&
-        newInteraction.memberPermissions?.has(
-          PermissionFlagsBits.ManageMessages
-        );
+        newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages);
       const deleteThread =
         modOptions === 'delete-thread:dm' &&
-        newInteraction.memberPermissions?.has(
-          PermissionFlagsBits.ManageThreads
-        ) &&
+        newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageThreads) &&
         targetMessage.channel.isThread() &&
         targetMessage.channel.ownerId === targetMessage.author.id;
       const dmMemberInstead =
         (deleteMessage || deleteThread) &&
         modOptions.endsWith(':dm') &&
-        newInteraction.memberPermissions?.has(
-          PermissionFlagsBits.ManageMessages
-        );
+        newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages);
 
       if (!modOptions) {
         // if response already sent recently, do not send again
@@ -434,10 +399,7 @@ export const command: ContextMenuCommand = {
         const _chosenResponses = chosenResponses.filter(
           (r) => !responsesCache.includes(`${targetMessage.id}-${r.name}`)
         );
-        if (
-          !chosenResponses.length ||
-          chosenResponses.length !== _chosenResponses.length
-        ) {
+        if (!chosenResponses.length || chosenResponses.length !== _chosenResponses.length) {
           newInteraction.reply({
             content: 'Someone has already sent those responses recently!',
             flags: MessageFlags.Ephemeral,
@@ -464,10 +426,7 @@ export const command: ContextMenuCommand = {
                   ? getParentChannelUrl(interaction.targetMessage.channel)
                   : interaction.targetMessage.channel.url
               } **was deleted** because it was against the rules.` +
-                `\n> ${interaction.targetMessage.content
-                  .slice(0, 500)
-                  .split('\n')
-                  .join('\n> ')}` +
+                `\n> ${interaction.targetMessage.content.slice(0, 500).split('\n').join('\n> ')}` +
                 `\n\nPlease see the helpful tips below it to improve your future messages:`
             ),
 
@@ -494,13 +453,10 @@ export const command: ContextMenuCommand = {
       } satisfies InteractionReplyOptions | MessagePayload;
 
       if (dmMemberInstead) {
-        const success = await newInteraction.user
-          .send(message)
-          .catch(() => false);
+        const success = await newInteraction.user.send(message).catch(() => false);
         if (!success) {
           await newInteraction.reply({
-            content:
-              'Failed to send DM. They might have DMs from server members disabled.',
+            content: 'Failed to send DM. They might have DMs from server members disabled.',
             flags: MessageFlags.Ephemeral,
           });
           return;
@@ -514,9 +470,7 @@ export const command: ContextMenuCommand = {
         await newInteraction.reply(message);
       }
 
-      chosenResponses.map(({ name }) =>
-        responsesCache.push(`${targetMessage.id}-${name}`)
-      );
+      chosenResponses.map(({ name }) => responsesCache.push(`${targetMessage.id}-${name}`));
       responsesCache.length = Math.min(responsesCache.length, 10);
 
       if (deleteThread && targetMessage.channel.isThread()) {

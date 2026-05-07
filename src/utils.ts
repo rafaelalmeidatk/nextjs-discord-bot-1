@@ -6,13 +6,10 @@ const staffRoles = ['next.js', 'moderator', 'vercel'];
 export const isStaff = (member: GuildMember | null | undefined): boolean => {
   if (!member) return false;
 
-  return member.roles.cache.some((role) =>
-    staffRoles.includes(role.name.toLowerCase())
-  );
+  return member.roles.cache.some((role) => staffRoles.includes(role.name.toLowerCase()));
 };
 
-export const isJsOrTsFile = (file: string) =>
-  file.endsWith('.ts') || file.endsWith('.js');
+export const isJsOrTsFile = (file: string) => file.endsWith('.ts') || file.endsWith('.js');
 
 export const logAndDelete = async (
   client: Client,
@@ -20,9 +17,7 @@ export const logAndDelete = async (
   reason: string,
   deletedByUser?: User
 ) => {
-  const modLogChannel = client.channels.cache.get(
-    MOD_LOG_CHANNEL_ID
-  ) as TextChannel;
+  const modLogChannel = client.channels.cache.get(MOD_LOG_CHANNEL_ID) as TextChannel;
 
   await modLogChannel.send({
     content: message.author.id,
@@ -68,10 +63,7 @@ type RemainingTime = {
   seconds: number;
 };
 
-export const remainingTime = (
-  startTime: number,
-  endTime: number
-): RemainingTime => {
+export const remainingTime = (startTime: number, endTime: number): RemainingTime => {
   // https://stackoverflow.com/a/13904120
   // get total seconds between the times
   let delta = Math.abs(endTime - startTime) / 1000;

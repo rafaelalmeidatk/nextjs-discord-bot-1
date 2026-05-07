@@ -30,9 +30,7 @@ const featureFiles = fs
   .filter(isJsOrTsFile);
 
 const features: FeatureFile[] = await Promise.all(
-  featureFiles.map(
-    async (file) => (await import(`./features/${file}`)) as FeatureFile
-  )
+  featureFiles.map(async (file) => (await import(`./features/${file}`)) as FeatureFile)
 );
 
 client.on('clientReady', () => {
@@ -42,15 +40,11 @@ client.on('clientReady', () => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isChatInputCommand()) {
-    slashCommands
-      .find((c) => c.data.name === interaction.commandName)
-      ?.execute(interaction);
+    slashCommands.find((c) => c.data.name === interaction.commandName)?.execute(interaction);
   }
 
   if (interaction.isMessageContextMenuCommand()) {
-    contextMenuCommands
-      .find((c) => c.data.name === interaction.commandName)
-      ?.execute(interaction);
+    contextMenuCommands.find((c) => c.data.name === interaction.commandName)?.execute(interaction);
   }
 });
 
@@ -59,9 +53,7 @@ client.on('messageCreate', (message) => {
 
   // if user types into the intros channel, give them the verified role
   if (message.channel.id == INTRO_CHANNEL_ID) {
-    message.member?.roles
-      .add(VERIFIED_ROLE)
-      .catch((err) => console.log(err.message, 'Verify'));
+    message.member?.roles.add(VERIFIED_ROLE).catch((err) => console.log(err.message, 'Verify'));
   }
 
   features.forEach((f) => f.onMessage?.(client, message));
@@ -84,9 +76,7 @@ client.on('messageDelete', async (message) => {
   } else {
     // tell the mods about this to manually clean up
     if (!process.env.MOD_LOG_CHANNEL_ID) return;
-    const modLogChannel = client.channels.cache.get(
-      process.env.MOD_LOG_CHANNEL_ID
-    );
+    const modLogChannel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
     if (!modLogChannel?.isSendable()) return;
 
     await modLogChannel.send({
@@ -115,9 +105,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
   if (reaction.partial) {
     try {
       const fetchedReaction = await reaction.fetch();
-      features.forEach(
-        (f) => f.onReactionAdd?.(client, fetchedReaction, user as User)
-      );
+      features.forEach((f) => f.onReactionAdd?.(client, fetchedReaction, user as User));
     } catch (error) {
       console.log('Error while trying to fetch a reaction', error);
     }
@@ -146,16 +134,12 @@ client.on('messageReactionRemove', async (reaction, user) => {
   if (reaction.partial) {
     try {
       const fetchedReaction = await reaction.fetch();
-      features.forEach(
-        (f) => f.onReactionRemove?.(client, fetchedReaction, user as User)
-      );
+      features.forEach((f) => f.onReactionRemove?.(client, fetchedReaction, user as User));
     } catch (error) {
       console.log('Error while trying to fetch a reaction', error);
     }
   } else {
-    features.forEach(
-      (f) => f.onReactionRemove?.(client, reaction, user as User)
-    );
+    features.forEach((f) => f.onReactionRemove?.(client, reaction, user as User));
   }
 });
 

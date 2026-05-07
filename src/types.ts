@@ -15,10 +15,7 @@ import type {
 
 export type OnStartupHandler = (client: Client) => Promise<void>;
 
-export type OnMessageHandler = (
-  client: Client,
-  message: Message
-) => Promise<void>;
+export type OnMessageHandler = (client: Client, message: Message) => Promise<void>;
 
 export type OnReactionHandler = (
   client: Client,
@@ -46,9 +43,7 @@ export type SlashCommandFile = {
 
 export type ContextMenuCommand = {
   data: ContextMenuCommandBuilder;
-  execute: (
-    interaction: MessageContextMenuCommandInteraction
-  ) => void | Promise<void>;
+  execute: (interaction: MessageContextMenuCommandInteraction) => void | Promise<void>;
 };
 
 export type ContextMenuCommandFile = {

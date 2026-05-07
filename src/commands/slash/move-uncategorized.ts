@@ -28,9 +28,7 @@ export const command: SlashCommand = {
 
     let category: CategoryChannel;
     try {
-      category = options.getChannel('category', true, [
-        ChannelType.GuildCategory,
-      ]);
+      category = options.getChannel('category', true, [ChannelType.GuildCategory]);
     } catch (err) {
       if (
         err instanceof TypeError &&
@@ -100,9 +98,7 @@ export const command: SlashCommand = {
     if (failureCount > 0) {
       description += `Failed to move ${failureCount} channels`;
 
-      console.error(
-        `Failed to move ${failureCount} channels to ${category.name}:`
-      );
+      console.error(`Failed to move ${failureCount} channels to ${category.name}:`);
       for (const r of res) {
         if (r.status !== 'rejected') continue;
         console.error(r.reason);

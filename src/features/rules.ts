@@ -111,9 +111,7 @@ More tips: <https://stackoverflow.com/help/how-to-ask>
       new ButtonBuilder()
         .setLabel('#help-forum')
         .setStyle(ButtonStyle.Link)
-        .setURL(
-          'https://discord.com/channels/752553802359505017/1007476603422527558'
-        )
+        .setURL('https://discord.com/channels/752553802359505017/1007476603422527558')
     ),
   ],
 };
@@ -145,9 +143,7 @@ export const onStartup: OnStartupHandler = async (client) => {
   const channelMessages = await channel.messages.fetch({ limit: 100 });
 
   // Filter only the messages from the bot
-  const channelMessagesFromBot = channelMessages.filter(
-    (m) => m.author.id === client.user?.id
-  );
+  const channelMessagesFromBot = channelMessages.filter((m) => m.author.id === client.user?.id);
   const channelMessageFromBot = channelMessagesFromBot.last();
 
   if (!channelMessageFromBot) {
@@ -156,8 +152,7 @@ export const onStartup: OnStartupHandler = async (client) => {
   } else {
     // Kinda hacky way to check if the message components are the same
     const isSame =
-      RULE_MESSAGE.components?.length ===
-        channelMessageFromBot.components.length &&
+      RULE_MESSAGE.components?.length === channelMessageFromBot.components.length &&
       RULE_MESSAGE.components?.every((comp, index) => {
         const existingComp = channelMessageFromBot.components[index];
         return (comp as any).data.id === existingComp.id;

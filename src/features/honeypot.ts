@@ -22,9 +22,7 @@ export const onMessage: OnMessageHandler = async (client, message) => {
 
     const modLogChannel = client.channels.cache.get(MOD_LOG_CHANNEL_ID);
     if (!modLogChannel?.isSendable()) {
-      console.warn(
-        `No mod-log channel found (using the ID ${MOD_LOG_CHANNEL_ID})!`
-      );
+      console.warn(`No mod-log channel found (using the ID ${MOD_LOG_CHANNEL_ID})!`);
       return;
     }
 
@@ -37,9 +35,7 @@ export const onMessage: OnMessageHandler = async (client, message) => {
           fields: [
             {
               name: 'Message',
-              value: message.content
-                ? `\`\`\`${message.content}\`\`\``
-                : '*No text content*',
+              value: message.content ? `\`\`\`${message.content}\`\`\`` : '*No text content*',
             },
           ],
         },
@@ -53,10 +49,6 @@ export const onMessage: OnMessageHandler = async (client, message) => {
     console.error('Error banning user from honeypot channel:', error);
 
     // If for some reason we can't ban, at least delete the message and log it
-    await logAndDelete(
-      client,
-      message,
-      'Honeypot channel violation (ban failed)'
-    );
+    await logAndDelete(client, message, 'Honeypot channel violation (ban failed)');
   }
 };

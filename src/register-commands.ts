@@ -8,25 +8,18 @@ import { allCommands } from './commands.ts';
   const guildId = process.env.DEV_GUILD_ID;
 
   if (isDevRegister && !guildId) {
-    throw new Error(
-      'The DEV_GUILD_ID env variable should be set to register commands in dev'
-    );
+    throw new Error('The DEV_GUILD_ID env variable should be set to register commands in dev');
   }
 
   const commands = allCommands().map((file) => file.data.toJSON());
 
-  const rest = new REST({ version: '10' }).setToken(
-    process.env.DISCORD_BOT_TOKEN
-  );
+  const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
   console.log(`Started refreshing ${commands.length} application commands.`);
 
   const data = (await rest.put(
     isDevRegister
-      ? Routes.applicationGuildCommands(
-          process.env.DISCORD_CLIENT_ID,
-          guildId ?? ''
-        )
+      ? Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID, guildId ?? '')
       : Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
     { body: commands }
   )) as unknown[];

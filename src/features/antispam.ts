@@ -23,9 +23,7 @@ export const onMessage: OnMessageHandler = async (client, message) => {
   if (
     !messageAuthor ||
     isStaff(messageAuthor) ||
-    messageAuthor.roles.cache.some((role) =>
-      ROLES_WHITELIST.includes(role.name.toLowerCase())
-    )
+    messageAuthor.roles.cache.some((role) => ROLES_WHITELIST.includes(role.name.toLowerCase()))
   )
     return;
 
@@ -33,9 +31,7 @@ export const onMessage: OnMessageHandler = async (client, message) => {
 
   if (
     emojisCount >
-    (message.channelId === INTRODUCTIONS_CHANNEL_ID
-      ? MAX_EMOJI_COUNT * 5
-      : MAX_EMOJI_COUNT)
+    (message.channelId === INTRODUCTIONS_CHANNEL_ID ? MAX_EMOJI_COUNT * 5 : MAX_EMOJI_COUNT)
   ) {
     await message.author.send(dmMessage);
     await logAndDelete(client, message, 'Too many emojis');

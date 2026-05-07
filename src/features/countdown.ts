@@ -17,9 +17,7 @@ let enabled = false;
 export const onStartup: OnStartupHandler = async (client) => {
   if (!enabled) return;
 
-  const voiceChannel = client.channels.cache.get(
-    COUNTDOWN_VOICE_CHANNEL_ID
-  ) as VoiceChannel;
+  const voiceChannel = client.channels.cache.get(COUNTDOWN_VOICE_CHANNEL_ID) as VoiceChannel;
 
   if (!voiceChannel) {
     console.warn(
@@ -39,19 +37,14 @@ export const onStartup: OnStartupHandler = async (client) => {
       const channelName = `Next.js Conf started!`;
       voiceChannel.setName(channelName);
 
-      const titleVoiceChannel = client.channels.cache.get(
-        TITLE_VOICE_CHANNEL_ID
-      );
+      const titleVoiceChannel = client.channels.cache.get(TITLE_VOICE_CHANNEL_ID);
       titleVoiceChannel?.delete();
 
       enabled = false;
       return;
     }
 
-    const { days, hours, minutes } = remainingTime(
-      Date.now(),
-      targetDate.getTime()
-    );
+    const { days, hours, minutes } = remainingTime(Date.now(), targetDate.getTime());
 
     const channelName = `${days} Days ${hours} Hours ${minutes} Mins`;
     voiceChannel.setName(channelName);

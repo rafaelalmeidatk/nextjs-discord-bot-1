@@ -17,9 +17,7 @@ import type { SlashCommand } from '../../types.ts';
 export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('report')
-    .setDescription(
-      'Send a report to the moderators. Opens a modal to fill out the report.'
-    )
+    .setDescription('Send a report to the moderators. Opens a modal to fill out the report.')
     .setContexts(InteractionContextType.Guild),
 
   async execute(interaction) {
@@ -57,10 +55,7 @@ export const command: SlashCommand = {
           .setLabel('Attachments (optional)')
           .setDescription('Describe the issue you want to report in detail')
           .setFileUploadComponent(
-            new FileUploadBuilder()
-              .setCustomId('attachments')
-              .setRequired(false)
-              .setMaxValues(5)
+            new FileUploadBuilder().setCustomId('attachments').setRequired(false).setMaxValues(5)
           ),
         new LabelBuilder()
           .setLabel('Urgent')
@@ -80,17 +75,14 @@ export const command: SlashCommand = {
       });
 
       const title = newInteraction.fields.getTextInputValue('title');
-      const description =
-        newInteraction.fields.getTextInputValue('description');
+      const description = newInteraction.fields.getTextInputValue('description');
       const attachments = newInteraction.fields.getUploadedFiles('attachments');
       const urgent = newInteraction.fields.getCheckbox('urgent');
 
       const channel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
 
       if (!channel || !channel.isSendable()) {
-        console.error(
-          `No mod-log channel found (using the ID ${process.env.MOD_LOG_CHANNEL_ID})!`
-        );
+        console.error(`No mod-log channel found (using the ID ${process.env.MOD_LOG_CHANNEL_ID})!`);
 
         interaction.reply({
           content: 'Something went wrong, please try again later',
@@ -114,8 +106,7 @@ export const command: SlashCommand = {
               const buffer = await response.arrayBuffer();
               return new AttachmentBuilder(Buffer.from(buffer), {
                 name: `${index}_${attachment.name}`,
-                description:
-                  attachment.description ?? 'Uploaded file from user',
+                description: attachment.description ?? 'Uploaded file from user',
               });
             })
           )
@@ -141,7 +132,7 @@ export const command: SlashCommand = {
               ? { url: `attachment://${imageAttachments[0].name}` }
               : undefined,
             // url needed so that it "groups" many attachments together and shows a nice gallery if there are multiple images, instead of showing them as separate embeds
-            // but also so you can click on the "link" and go to the channel contenxt incase thats important 
+            // but also so you can click on the "link" and go to the channel contenxt incase thats important
             // - if a message id doesn't exist, then discord uses slowflake to find messages arround same time instead, which is still good enough to find the possible context of the report
             url: `https://discord.com/channels/${guild.id}/${interaction.channelId}/${interaction.id}`,
           },
