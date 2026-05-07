@@ -9,8 +9,6 @@ import {
   CheckboxBuilder,
   AttachmentBuilder,
   MessageFlags,
-  TextDisplayBuilder,
-  SectionBuilder,
 } from 'discord.js';
 import type { SlashCommand } from '../../types.ts';
 
@@ -137,7 +135,7 @@ export const command: SlashCommand = {
             url: `https://discord.com/channels/${guild.id}/${interaction.channelId}/${interaction.id}`,
           },
           ...(imageAttachments && imageAttachments.length > 1
-            ? imageAttachments.slice(1).map((file, index) => ({
+            ? imageAttachments.slice(1).map((file) => ({
                 url: `https://discord.com/channels/${guild.id}/${interaction.channelId}/${interaction.id}`,
                 image: {
                   url: `attachment://${file.name}`,
