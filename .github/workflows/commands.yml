@@ -11,20 +11,23 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+
+    - name: Enable corepack
+      run: corepack enable
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '24'
-        cache: 'yarn'
+        cache: 'pnpm'
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: pnpm install --frozen-lockfile
 
     - name: Deploy commands
       env:
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
         DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
         MOD_LOG_CHANNEL_ID: ${{ secrets.MOD_LOG_CHANNEL_ID }}
-      run: yarn register-commands
+      run: pnpm register-commands
