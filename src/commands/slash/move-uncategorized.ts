@@ -6,6 +6,7 @@ import {
   EmbedBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
+  InteractionContextType,
 } from 'discord.js';
 import { SlashCommand } from '../../types';
 
@@ -13,6 +14,7 @@ export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('move-uncategorized')
     .setDescription('Moves uncategorized channels into a single category')
+    .setContexts(InteractionContextType.Guild)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .addChannelOption((option) =>
       option

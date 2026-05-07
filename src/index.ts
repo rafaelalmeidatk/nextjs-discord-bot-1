@@ -37,7 +37,7 @@ for (const featureFile of featureFiles) {
   features.push(feature);
 }
 
-client.on('ready', () => {
+client.on('clientReady', () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   features.forEach((f) => f.onStartup?.(client));
 });
@@ -71,28 +71,29 @@ client.on('messageCreate', (message) => {
 
 client.on('messageDelete', async (message) => {
   // if user deletes the original message for a thread, delete the thread
-  if (message.channelId !== message.id) return
-  if (!message.inGuild()) return
+  if (message.channelId !== message.id) return;
+  if (!message.inGuild()) return;
 
   // only #help-forum is counted
-  if (message.channel.parentId !== HELP_CHANNEL_ID) return
+  if (message.channel.parentId !== HELP_CHANNEL_ID) return;
 
   const channelMessages = await message.channel.messages.fetch({ limit: 10 });
 
   // only count messages that are not a bot & if no messages, delete the thread
-  const humanMessages = channelMessages.filter(m => !m.author.bot);
+  const humanMessages = channelMessages.filter((m) => !m.author.bot);
   if (humanMessages.size === 0) {
-    message.channel.delete('OP deleted initial message, so removing thread')
-
+    message.channel.delete('OP deleted initial message, so removing thread');
   } else {
     // tell the mods about this to manually clean up
     if (!process.env.MOD_LOG_CHANNEL_ID) return;
-    const modLogChannel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID)
-    if (!modLogChannel?.isTextBased()) return;
+    const modLogChannel = client.channels.cache.get(
+      process.env.MOD_LOG_CHANNEL_ID
+    );
+    if (!modLogChannel?.isSendable()) return;
 
     await modLogChannel.send({
       content: `Original message in thread deleted: ${message.channel.url}`,
-    })
+    });
   }
 });
 
@@ -160,14 +161,14 @@ client.on('messageReactionRemove', async (reaction, user) => {
   }
 });
 
-client.on("threadUpdate", (oldChannel, channel) => {
+client.on('threadUpdate', (oldChannel, channel) => {
   // make sure the rule threads stay pinned
-  const threads = ['1138338531983491154', '1159350273056190524']
+  const threads = ['1138338531983491154', '1159350273056190524'];
 
-  if (!threads.includes(channel.id)) return
-  if (channel.archived) channel.setArchived(false, 'Keep this thread pinned') 
-  if (!channel.flags.has('Pinned')) channel.pin('Keep this thread pinned')
-})
+  if (!threads.includes(channel.id)) return;
+  if (channel.archived) channel.setArchived(false, 'Keep this thread pinned');
+  if (!channel.flags.has('Pinned')) channel.pin('Keep this thread pinned');
+});
 
 // Wake up 🤖
 client.login(process.env.DISCORD_BOT_TOKEN);

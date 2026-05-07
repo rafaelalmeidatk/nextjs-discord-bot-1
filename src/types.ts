@@ -5,7 +5,7 @@ import {
   Message,
   MessageContextMenuCommandInteraction,
   MessageReaction,
-  SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
   User,
 } from 'discord.js';
 
@@ -36,7 +36,7 @@ export type FeatureFile = {
 };
 
 export type SlashCommand = {
-  data: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+  data: SlashCommandOptionsOnlyBuilder;
   execute: (interaction: ChatInputCommandInteraction) => void | Promise<void>;
 };
 
