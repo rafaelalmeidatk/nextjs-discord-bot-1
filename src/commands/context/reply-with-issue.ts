@@ -379,7 +379,7 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      const modOptions = newInteraction.fields.getRadioGroup('mod-only-options');
+      const modOptions = modOnlyOptions.length ? newInteraction.fields.getRadioGroup('mod-only-options') : null;
       const deleteMessage =
         (modOptions === 'delete-msg:dm' || modOptions === 'delete-msg') &&
         newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages);
