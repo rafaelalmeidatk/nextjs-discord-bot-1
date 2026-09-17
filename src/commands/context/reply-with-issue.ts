@@ -217,6 +217,7 @@ export const command: ContextMenuCommand = {
 
   async execute(interaction) {
     const { targetMessage } = interaction;
+    const random = crypto.randomUUID();
 
     // mainly for type safety
     if (!interaction.isMessageContextMenuCommand()) return;
@@ -238,7 +239,7 @@ export const command: ContextMenuCommand = {
         components: [
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
-              .setCustomId('deleteReplyWithIssue')
+              .setCustomId('deleteReplyWithIssue:' + random)
               .setLabel('Delete')
               .setStyle(ButtonStyle.Danger)
           ),
@@ -251,7 +252,8 @@ export const command: ContextMenuCommand = {
         const newInteraction = await reply.resource?.message?.awaitMessageComponent({
           componentType: ComponentType.Button,
           time: 0.5 * 60 * 1000,
-          filter: (i) => i.user.id === interaction.user.id,
+          filter: (i) =>
+            i.user.id === interaction.user.id && i.customId === `deleteReplyWithIssue:${random}`,
         });
         if (newInteraction) {
           await newInteraction.update({
@@ -284,7 +286,9 @@ export const command: ContextMenuCommand = {
       return;
     }
 
-    const modal = new ModalBuilder().setCustomId('replyWithIssue').setTitle('Reply with Issue');
+    const modal = new ModalBuilder()
+      .setCustomId('replyWithIssue:' + random)
+      .setTitle('Reply with Issue');
 
     const categoryCheckboxOptions = {} as Record<
       Categories | 'other',
@@ -356,8 +360,9 @@ export const command: ContextMenuCommand = {
     try {
       // wait for a a chosen option
       const newInteraction = await interaction.awaitModalSubmit({
-        time: 5 * 60 * 1000, // 5 minutes (more than enough time)
-        filter: (i) => i.user.id === interaction.user.id,
+        time: 2.5 * 60 * 1000, // 2.5 minutes (more than enough time)
+        filter: (i) =>
+          i.user.id === interaction.user.id && i.customId === `replyWithIssue:${random}`,
       });
 
       const repliesChosen = [] as string[];
@@ -379,7 +384,9 @@ export const command: ContextMenuCommand = {
         return;
       }
 
-      const modOptions = modOnlyOptions.length ? newInteraction.fields.getRadioGroup('mod-only-options') : null;
+      const modOptions = modOnlyOptions.length
+        ? newInteraction.fields.getRadioGroup('mod-only-options')
+        : null;
       const deleteMessage =
         (modOptions === 'delete-msg:dm' || modOptions === 'delete-msg') &&
         newInteraction.memberPermissions?.has(PermissionFlagsBits.ManageMessages);
@@ -453,7 +460,7 @@ export const command: ContextMenuCommand = {
       } satisfies InteractionReplyOptions | MessagePayload;
 
       if (dmMemberInstead) {
-        const success = await newInteraction.user.send(message).catch(() => false);
+        const success = await targetMessage.author.send(message).catch(() => false);
         if (!success) {
           await newInteraction.reply({
             content: 'Failed to send DM. They might have DMs from server members disabled.',

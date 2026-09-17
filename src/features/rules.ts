@@ -76,11 +76,16 @@ const RULE_MESSAGE: MessageCreateOptions & MessageEditOptions = {
 4. Use the channels provided properly by reading their descriptions. Moderators are free to delete any messages posted in the wrong channel.
 5. No NSFW, political, religious, job-related, or unrelated content or discussions that don't align with the community's purpose. This includes profile pictures, usernames, and any other content.
 6. Do not cross-post the same question on multiple channels, including linking the message on other channels.
-
-Most importantly, use common sense and keep in mind that this list of rules isn't exhaustive; please listen to what our moderators say.
-If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!
-We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>
 `
+      ),
+      new TextDisplayBuilder().setContent(
+        `Most importantly, use common sense and keep in mind that this list of rules isn't exhaustive; please listen to what our moderators say.`
+      ),
+      new TextDisplayBuilder().setContent(
+        `If you see something against the rules or something that makes you feel unsafe, let the staff know. We want this server to be a welcoming space!`
+      ),
+      new TextDisplayBuilder().setContent(
+        `We are always looking to improve the server. Feel free to share your ideas or opinions in <#${FEEDBACK_CHANNEL_ID}>`
       )
     ),
     new ContainerBuilder().addTextDisplayComponents(
@@ -92,10 +97,9 @@ We are always looking to improve the server. Feel free to share your ideas or op
 3. Always try to add this to your questions when applicable: "What are you expecting to happen?", "What is happening instead?", "What have you tried?"
 4. Include the relevant dependencies you are working with. \`npx next info\` will give you a list to get you started
 5. Share the project or a minimal reproduction of the issue, this allows people to investigate better the problem
-
-More tips: <https://stackoverflow.com/help/how-to-ask>
 `
-      )
+      ),
+      new TextDisplayBuilder().setContent(`More tips: <https://stackoverflow.com/help/how-to-ask>`)
     ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()

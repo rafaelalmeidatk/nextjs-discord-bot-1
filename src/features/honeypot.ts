@@ -37,6 +37,14 @@ export const onMessage: OnMessageHandler = async (client, message) => {
               name: 'Message',
               value: message.content ? `\`\`\`${message.content}\`\`\`` : '*No text content*',
             },
+            ...(message.attachments.size > 0
+              ? [
+                  {
+                    name: 'Attachments',
+                    value: message.attachments.map((att) => `[${att.name}](${att.url})`).join('\n'),
+                  },
+                ]
+              : []),
           ],
         },
       ],

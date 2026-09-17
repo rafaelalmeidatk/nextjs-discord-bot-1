@@ -6,7 +6,6 @@ import {
   TextInputStyle,
   TextInputBuilder,
   FileUploadBuilder,
-  CheckboxBuilder,
   AttachmentBuilder,
   MessageFlags,
 } from 'discord.js';
@@ -54,13 +53,7 @@ export const command: SlashCommand = {
           .setDescription('Describe the issue you want to report in detail')
           .setFileUploadComponent(
             new FileUploadBuilder().setCustomId('attachments').setRequired(false).setMaxValues(5)
-          ),
-        new LabelBuilder()
-          .setLabel('Urgent')
-          .setDescription(
-            'Is this issue urgent and requires immediate attention from the moderators?'
           )
-          .setCheckboxComponent(new CheckboxBuilder().setCustomId('urgent'))
       );
 
     await interaction.showModal(modal);
@@ -69,13 +62,12 @@ export const command: SlashCommand = {
       // wait for the report
       const newInteraction = await interaction.awaitModalSubmit({
         time: 10 * 60 * 1000, // 10 minutes (more than enough time)
-        filter: (i) => i.user.id === interaction.user.id,
+        filter: (i) => i.user.id === interaction.user.id && i.customId === 'reportModal',
       });
 
       const title = newInteraction.fields.getTextInputValue('title');
       const description = newInteraction.fields.getTextInputValue('description');
       const attachments = newInteraction.fields.getUploadedFiles('attachments');
-      const urgent = newInteraction.fields.getCheckbox('urgent');
 
       const channel = client.channels.cache.get(process.env.MOD_LOG_CHANNEL_ID);
 
@@ -110,13 +102,13 @@ export const command: SlashCommand = {
           )
         : undefined;
 
-      const imageExtentions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+      const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
       const imageAttachments = files?.filter((att) =>
-        imageExtentions.some((ext) => att.name?.endsWith(ext))
+        imageExtensions.some((ext) => att.name?.endsWith(ext))
       );
 
       await channel.send({
-        content: urgent ? `<@&${process.env.MODERATOR_ROLE_ID}>` : undefined,
+        content: `<@&${process.env.MODERATOR_ROLE_ID}>`,
         embeds: [
           {
             title: '⚠️ New Report: ' + title,
