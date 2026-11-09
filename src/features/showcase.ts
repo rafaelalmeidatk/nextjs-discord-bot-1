@@ -88,8 +88,6 @@ const isPrivateIp = (ip: string): boolean => {
 };
 
 const githubRepoHasNextConfig = async (owner: string, repo: string): Promise<boolean | null> => {
-  let hasNextConfig: boolean | null = null;
-
   try {
     // `HEAD` resolves to the repository's default branch, so this works for `main`, `master`, etc.
     const treeResponse = await fetch(
@@ -110,23 +108,24 @@ const githubRepoHasNextConfig = async (owner: string, repo: string): Promise<boo
         tree?: { path?: string; type?: string }[];
         truncated?: boolean;
       };
-      const tree = treeData.tree ?? [];
 
-      hasNextConfig = tree.some(
+      // If GitHub truncated the tree we can't be sure, so treat it as inconclusive.
+      if (treeData.truncated) return null;
+
+      return treeData.tree?.some(
         (entry) =>
           entry.type === 'blob' &&
           typeof entry.path === 'string' &&
           NEXT_CONFIG_FILE.test(entry.path)
-      );
-
-      // If GitHub truncated the tree we can't be sure, so treat it as inconclusive.
-      if (!hasNextConfig && treeData.truncated) hasNextConfig = null;
+      ) ?? false;
+    } else if (treeResponse.status === 404) {
+      // Repository doesn't exist or is private, so we can't verify it.
+      return false;
     }
+    return null; // Treat other errors as inconclusive.
   } catch (error) {
     console.warn(`Failed to check GitHub repository ${owner}/${repo}`, error);
   }
-
-  return hasNextConfig;
 };
 
 const checkLink = async (url: string): Promise<LinkCheck> => {
@@ -264,7 +263,7 @@ const logToMods = async (client: Client, message: Message) => {
   }
 
   await modLogChannel.send({
-    content: `Couldn't find a Next.js app in this showcase post: ${message.url}`
+    content: `Couldn't find a Next.js app in this showcase post: ${message.url}`,
   });
 };
 
