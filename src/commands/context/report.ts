@@ -70,12 +70,17 @@ export const command: ContextMenuCommand = {
     const userGuildMember = await guild.members.fetch(user.id).catch(() => null);
     const isUserStaff = isStaff(userGuildMember);
 
+    const messageContent = '```' + targetMessage.content + '```';
+    const messageAttachments = targetMessage.attachments.size
+      ? `\nAttachments:\n${targetMessage.attachments.map((att) => `${att.url}`).join(', ')}`
+      : '';
+
     channel.send({
       content: !isUserStaff ? `<@&${process.env.MODERATOR_ROLE_ID}>` : undefined,
       embeds: [
         {
           title: '⚠️ Message Reported',
-          description: '```' + targetMessage.content + '```',
+          description: messageContent + messageAttachments,
           color: 16098851,
           author: {
             name: author?.displayName ?? 'Unknown user',
