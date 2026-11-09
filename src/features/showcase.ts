@@ -39,7 +39,7 @@ type LinkCheck = {
   reason: string;
 };
 
-const discardBody = (response: Response) => response.body?.cancel().catch(() => { });
+const discardBody = (response: Response) => response.body?.cancel().catch(() => {});
 
 const readTextWithLimit = async (response: Response, limit: number) => {
   if (!response.body) return '';
@@ -57,7 +57,7 @@ const readTextWithLimit = async (response: Response, limit: number) => {
     text += decoder.decode(value, { stream: true });
   }
 
-  await reader.cancel().catch(() => { });
+  await reader.cancel().catch(() => {});
   return text + decoder.decode();
 };
 
@@ -112,12 +112,14 @@ const githubRepoHasNextConfig = async (owner: string, repo: string): Promise<boo
       // If GitHub truncated the tree we can't be sure, so treat it as inconclusive.
       if (treeData.truncated) return null;
 
-      return treeData.tree?.some(
-        (entry) =>
-          entry.type === 'blob' &&
-          typeof entry.path === 'string' &&
-          NEXT_CONFIG_FILE.test(entry.path)
-      ) ?? false;
+      return (
+        treeData.tree?.some(
+          (entry) =>
+            entry.type === 'blob' &&
+            typeof entry.path === 'string' &&
+            NEXT_CONFIG_FILE.test(entry.path)
+        ) ?? false
+      );
     } else if (treeResponse.status === 404) {
       // Repository doesn't exist or is private, so we can't verify it.
       return false;
