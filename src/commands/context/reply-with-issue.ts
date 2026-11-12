@@ -212,7 +212,6 @@ export const command: ContextMenuCommand = {
   data: new ContextMenuCommandBuilder()
     .setName('Reply with issue...')
     .setContexts(InteractionContextType.Guild)
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages)
     .setType(ApplicationCommandType.Message),
 
   async execute(interaction) {
